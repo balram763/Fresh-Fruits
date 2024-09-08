@@ -41,7 +41,7 @@ const Navbar = () => {
         </Link>
       <form>
 
-      <select onChange={(e)=>setSort(e.target.value)} style={{width : '90px'}} className="btn mx-3 form-select btn-light" id="inputGroupSelect01">
+      <select onChange={(e)=>setSort(e.target.value)} style={{width : '80px'}} className="btn mx-3 form-select btn-light" id="inputGroupSelect01">
     <option >Sort</option>
     <option value="1">LOW to HIGH</option>
     <option value="2">HIGH to LOW</option>
