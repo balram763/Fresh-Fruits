@@ -10,7 +10,7 @@ const SliderImage = ({user,index}) => {
       <div className="carousel-caption d-none d-md-block">
         <h5>{user.name}</h5>
         <h2 className=' text-danger'>{user.price} /-</h2>
-        <Link to={`/${user.id}`} className="btn my-2 btn-sm btn-success">ReadMore</Link>
+        <Link to={`/${user._id}`} className="btn my-2 btn-sm btn-success">ReadMore</Link>
       </div>
     </div>
 
