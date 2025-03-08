@@ -1,16 +1,15 @@
 import React, { useContext, useEffect, useState } from 'react'
 import ShoppingContext from '../providers/ShoppingContext'
-import { useNavigate } from 'react-router-dom'
+import { Link,useNavigate } from 'react-router-dom'
 
 const Login = () => {
-    const {handleLogin,user,setUser} = useContext(ShoppingContext)
+    const {handleLogin,user} = useContext(ShoppingContext)
     const Navigate = useNavigate()
 
 
     useEffect(()=>{
         if(user !== null && localStorage.getItem("userdetail") !== null){
-        Navigate('/')
-            
+        Navigate('/')   
         }
     },[user])
 
@@ -41,6 +40,8 @@ const Login = () => {
             <input minLength={8} maxLength={15} name='password' value={formData.password} onChange={handleChange} style={{height:'50px',marginBlock:'20px'}} type="password" className="form-control" placeholder='Enter Password'/>
             <button className="mt-2 btn form-control btn-primary">LogIn</button>
         </form>
+
+        <Link to={'/Register'} className="mt-3 text-primary">Not Have Account ? SignUp</Link>
     </div>
     </div>
     </>
