@@ -1,11 +1,49 @@
 import React, { useContext, useState } from 'react'
 import ShoppingContext from '../providers/ShoppingContext';
 import CardItems from './CardItems';
+import { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import toast from 'react-hot-toast';
 
 const AddToCard = () => {
   
-  const {cardItems} = useContext(ShoppingContext)
+  const {cardItems,user,setCardItems,setUser} = useContext(ShoppingContext)
+  const Navigate = useNavigate()
 
+  const fetchCart = async () => {
+    let token;
+    const storedToken = localStorage.getItem("token");
+    
+      if (storedToken) {
+        try {
+          const parsedToken = JSON.parse(storedToken);
+           token = parsedToken.token
+           setUser(parsedToken); 
+        } catch (error) {
+          toast.error("Login...");
+          Navigate('/login')
+        }
+      }
+    try {
+        const response = await fetch("https://fresh-fruits-backend.onrender.com/api/cart", {
+            headers: {
+                Authorization: `Bearer ${token}`,
+                "Content-Type": "application/json",
+            },
+        });
+            const data = await response.json();
+            setCardItems(data);
+        
+    } catch (error) {
+        toast.error("Error fetching cart:", error);
+    }
+};
+
+
+  useEffect(() => {
+
+      fetchCart();
+}, []);
 
   const totalCartValue = cardItems?.reduce((sum, item) => sum + (item.price * item.quantity), 0) || 0;
 
@@ -27,7 +65,7 @@ const AddToCard = () => {
 
     <div className="row">
     {
-      cardItems.map(item => <CardItems key={item.id} item = {item}/>)
+      cardItems.map(item => <CardItems key={item._id} item = {item}/>)
     }
      
     <div className='card p-3 px-4 shadow text-primary fs-4 mt-2 text-center  w-80'> Total Card Value : {totalCartValue}</div>

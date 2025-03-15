@@ -5,7 +5,6 @@ import {Link, useParams } from 'react-router-dom';
 const PageDetail = () => {
 
   const { id } = useParams();
-  console.log(id)
 
   let [count,setCount] = useState(1)
   const [singleproduct,setSingleProduct] = useState([])
@@ -32,7 +31,7 @@ const PageDetail = () => {
       <h3 className=" text-center">PRODUCT DETAILS</h3>
       <div className="d-flex flex-wrap">
       <div>
-      <img src={singleproduct?.img} alt="" style={{width:'50vw',height:'45vh',objectFit:'contain'}}/>
+      <img src={singleproduct?.img?.startsWith('/uploads') ? `https://fresh-fruits-backend.onrender.com${singleproduct?.img}` : singleproduct?.img} alt="" style={{width:'50vw',height:'45vh',objectFit:'contain'}}/>
       </div>
       <div className='text-center d-flex flex-column align-items-center flex-wrap justify-content-center w-100'>
       <h4 className='card-title'>{singleproduct?.name}</h4>

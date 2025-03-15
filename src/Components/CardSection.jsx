@@ -1,13 +1,51 @@
 
-import React, { useContext, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import Card from './Card'
 import ShoppingContext from '../providers/ShoppingContext'
 import Slider from './Slider'
 import AddedProduct from './AddedProduct'
 import Footer from './Footer'
+import toast from 'react-hot-toast'
 
 const CardSection = () => {
-    const {product,handleCategory,categoryProduct} = useContext(ShoppingContext)
+    const {product,handleCategory,categoryProduct,setUser,setCardItems} = useContext(ShoppingContext)
+
+ 
+    
+    useEffect(() => {
+      const storedToken = localStorage.getItem("token");
+    
+      if (storedToken) {
+        try {
+          const parsedToken = JSON.parse(storedToken);
+          setUser(parsedToken); 
+          
+        } catch (error) {
+          toast.error('Something went Wrong..')
+        }
+      }
+
+      
+
+      fetchCart(storedToken)
+    }, []);
+
+
+    const fetchCart = async(storedToken) => {
+      const parsedToken = JSON.parse(storedToken);
+      const response = await fetch("https://fresh-fruits-backend.onrender.com/api/cart", {
+        headers: {
+            Authorization: `Bearer ${parsedToken.token}`,
+            "Content-Type": "application/json",
+        },
+    });
+        const data = await response.json();
+        setCardItems(data);
+    }
+    
+    
+
+    
     
 
     const selectCategory = (e) => {

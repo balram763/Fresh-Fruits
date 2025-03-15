@@ -1,13 +1,15 @@
-import React, { useContext } from 'react'
-import ShoppingContext from '../providers/ShoppingContext'
+import React, { } from 'react'
+import useFetch from '../hooks/useFetch'
 import Card from './Card'
 
 const AddedProduct = () => {
-    const {product} = useContext(ShoppingContext)
+    const {data} = useFetch("https://fresh-fruits-backend.onrender.com/api/item/new")
+
     return (
         <>
-     {product?.map((user, index) => (
-     index > 21 && <Card user={user} key={user._id} />
+
+     {data?.map((user) => (
+     <Card user={user} key={user._id} />
      ))}
 
         </>

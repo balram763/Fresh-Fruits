@@ -1,30 +1,69 @@
-
 import React, { useContext } from 'react';
 import ShoppingContext from '../providers/ShoppingContext';
+import toast from 'react-hot-toast';
 
 const CardItems = ({ item }) => {
-  const { cardItems, setCardItems } = useContext(ShoppingContext);
+  const { cardItems, setCardItems, user, handleCartChange } = useContext(ShoppingContext);
 
   const updateQuantity = (change) => {
     const updatedItems = cardItems.map((cartItem) =>
-      cartItem.id === item.id
-        ? { ...cartItem, quantity: Math.max(1, cartItem.quantity + change) } // Prevent quantity from going below 1
+      cartItem._id === item._id
+        ? { ...cartItem, quantity: Math.max(1, cartItem.quantity + change) }
         : cartItem
     );
+    handleCartChange(updatedItems);
+  };
+
+  const handleDelete = async () => {
+    const updatedItems = cardItems.filter((cartItem) => cartItem._id !== item._id);
+    try {
+      await fetch('https://fresh-fruits-backend.onrender.com/api/cart/update', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${user.token}`,
+        },
+        body: JSON.stringify({ cart: updatedItems }),
+      });
+      toast.success('Item Deleted')
+    } catch (error) {
+      toast.error('Something went wrong')
+   
+    }
 
     setCardItems(updatedItems);
   };
 
   return (
     <div className="col col-lg-6 col-md-12 col-sm-12 col-xs-12">
-      <div className="card p-2 px-4 shadow d-flex flex-wrap justify-content-between flex-row w-100">
-        <h2 className="px-5 fs-4">{item.name} :</h2>
-        <button onClick={() => updateQuantity(-1)} className="btn btn-primary">-</button>
-        <h4 className="text-primary mx-4 p-2">{item.quantity}</h4> 
-        <button onClick={() => updateQuantity(1)} className="btn btn-warning">+</button>
-        <div className="card p-2 m-2 shadow d-flex justify-content-center w-100">
-          <h5 className="text-danger p-2 text-center">
-            Total: {item.quantity} * {item.price} = {item.quantity * item.price} 
+      <div className="card p-3 shadow w-100">
+        <div className="d-flex align-items-center justify-content-between w-100">
+          <h4 className="fw-bold text-dark">{item.name}</h4>
+          <div className="d-flex align-items-center">
+            <button 
+              onClick={() => updateQuantity(-1)} 
+              className="btn btn-primary btn-sm mx-1"
+            >
+              <i className="fa-solid fa-minus"></i>
+            </button>
+            <span className="fw-bold text-primary mx-2">{item.quantity}</span>
+            <button 
+              onClick={() => updateQuantity(1)} 
+              className="btn btn-warning btn-sm mx-1"
+            >
+              <i className="fa-solid fa-plus"></i>
+            </button>
+          </div>
+          <button 
+            onClick={handleDelete} 
+            className="btn btn-danger btn-sm"
+          >
+            <i className="fa-solid fa-trash"></i>
+          </button>
+        </div>
+        <div className="card p-2 mt-2 shadow text-center">
+          <h5 className="text-danger  fw-bold">
+            Total: {item.quantity} * {item.price} = ₹{item.quantity * item.price}
           </h5>
         </div>
       </div>

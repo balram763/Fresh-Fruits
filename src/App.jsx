@@ -17,7 +17,10 @@ const App = () => {
   
   useEffect(()=>{
     getData()
+    const token  = localStorage.getItem('token')
   },[])
+
+  
 
 
   if(product.length === 0){

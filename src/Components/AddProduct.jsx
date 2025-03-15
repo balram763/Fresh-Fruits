@@ -10,18 +10,20 @@ const AddProduct = () => {
     const [category,setCategory] = useState('')
     const [image,setImage] = useState('')
 
-    const handleSubmit = (e) => {
-        e.preventDefault()
-        addProduct({
-            id : crypto.randomUUID(),
-            img : URL.createObjectURL(image),
-            name,
-            price,
-            description,
-            qty,
-            category,
-        })
-    }
+    const handleSubmit = async (e) => {
+      e.preventDefault();
+  
+      const formData = new FormData();
+      formData.append("img", image);
+      formData.append("name", name);
+      formData.append("price", price);
+      formData.append("description", description);
+      formData.append("qty", qty);
+      formData.append("category", category);
+  
+      await addProduct(formData);
+  };
+  
 
   return (
     <>
@@ -32,7 +34,7 @@ const AddProduct = () => {
         </h1>
         <div className="card p-2">
 
-            <form onSubmit={handleSubmit}>
+            <form onSubmit={handleSubmit} encType="multipart/form-data">
                 <input onChange={(e)=>setName(e.target.value)} type="text" className="form-control mt-4 p-2" placeholder='Product Name' />
                 <input onChange={(e)=>setPrice(e.target.value)} type="number" className="form-control mt-4 p-2" placeholder='Price' />
                 <input onChange={(e)=>setQty(e.target.value)} type="number" className="form-control mt-4 p-2" placeholder='Quantity' />
@@ -44,7 +46,8 @@ const AddProduct = () => {
                 <option defaultValue='0'>category</option>
                 <option value='Fruits' >fruits</option>
                 <option value='Vegatables' >vegetables</option>
-                <option value='Dairy' >dairy</option>
+                <option value='Cooking ingredients'>Cooking ingredients</option>
+                <option value='Dairy'>Dairy</option>
                 </select>
                 
                 <button className="btn btn-success form-control mt-4 p-2">Submit</button>

@@ -18,7 +18,7 @@ const Slider = () => {
     {
         product.map((user,index)=> {
            if(index<3){
-            return (<SliderImage user={user} index={index} key={index}/>)
+            return (<SliderImage user={user} index={index} key={user._id}/>)
            }
         })
     }

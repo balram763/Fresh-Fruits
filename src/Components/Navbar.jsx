@@ -5,7 +5,7 @@ import ShoppingContext from '../providers/ShoppingContext';
 import AddtoCardBtn from './AddtoCardBtn';
 
 const Navbar = () => {
-  const { productName, sortProduct, searchResults, setSearchResults,user,Logout } = useContext(ShoppingContext);
+  const { productName, sortProduct, searchResults, setSearchResults,user } = useContext(ShoppingContext);
   const [text, setText] = useState('');
   const [sort, setSort] = useState(1);
 
@@ -15,19 +15,18 @@ const Navbar = () => {
 
 
   const handleSearchChange = (e) => {
+    e.preventDefault()
     const query = e.target.value;
     setText(query);
     productName(query);
   };
 
   const handleSelectItem = (item) => {
+    e.preventDefault()
     setText(''); 
     setSearchResults([]);
   };
 
-  const handleLogout = () => {
-    Logout()
-  }
 
   return (
     <nav className="navbar navbar-expand-lg navbar-light bg-light shadow p-3">
@@ -53,16 +52,12 @@ const Navbar = () => {
         <div className="collapse navbar-collapse" id="navbarContent">
           <ul className="navbar-nav ms-auto mb-2 mb-lg-0 d-flex align-items-center">
 
-            <li className="nav-item mt-2">
-              <Link to="/listproduct" className="btn btn-sm p-2 btn-outline-warning me-2">
-                <i className="fa-solid fa-plus"></i> Product
-              </Link>
-            </li>
+            
 
             <li className="nav-item">
               <select
                 onChange={(e) => setSort(e.target.value)}
-                className="form-select btn-light mt-2"
+                className="form-select btn-light mt-2 me-2"
                 style={{ width: '130px' }}
               >
                 <option value="0">Sort</option>
@@ -90,12 +85,12 @@ const Navbar = () => {
                     style={{ top: '100%', zIndex: 10 }}
                   >
                     {searchResults.map((item) => (
-                      <li key={item.id} className="dropdown-item">
+                      <li key={item._id} className="dropdown-item">
                         <Link
-                          to={`/${item.id}`}
+                          to={`/${item._id}`}
                           className="text-dark"
                           style={{ textDecoration: 'none' }}
-                          onClick={() => handleSelectItem(item)}
+                          onClick={(e) => handleSelectItem(e)}
                         >
                           {item.name}
                         </Link>
@@ -107,22 +102,27 @@ const Navbar = () => {
             </li>
 
 
-            <li className="nav-item mt-2">
-               <AddtoCardBtn />
-            </li>
 
             {user ? 
             <>
             <li className="nav-item mt-2">
-                 <Link to={'/user/profile'} className='btn btn-sm btn-primary'>Adress</Link>
+               <AddtoCardBtn />
+            </li>
+
+            <li className="nav-item mt-2">
+              <Link to="/listproduct" className="btn btn-sm p-2 btn-outline-warning me-2">
+                <i className="fa-solid fa-plus"></i> Product
+              </Link>
+            </li>
+            
+               <li className="nav-item mt-2">
+                 <Link to={'/user/profile'} className='btn btn-sm btn-success fs-5'><i className="fa-solid fa-user"></i></Link>
                </li>
                
-             <li className="nav-item mt-2">
-                 <button onClick={handleLogout} className='btn btn-sm btn-danger'>LogOut</button>
-               </li>
+   
                </> 
-            :  <li className="nav-item mt-2">
-                 <Link to={'/login'} className='btn btn-sm btn-primary'>LogIN</Link>
+            :  <li className="nav-item mt-2 ms-2">
+                 <Link to={'/login'} className='btn btn-sm btn-success'>LogIN</Link>
                </li>}
 
 

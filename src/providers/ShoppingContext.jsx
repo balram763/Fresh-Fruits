@@ -1,4 +1,5 @@
 import { createContext, useState, useEffect } from "react";
+import toast from "react-hot-toast";
 
 const ShoppingContext = createContext();
 
@@ -12,11 +13,10 @@ export const Provider = ({ children }) => {
   const getData = async () => {
     try {
       const response = await fetch("https://fresh-fruits-backend.onrender.com/api/item");
-
       const data = await response.json();
       setProduct(data);
     } catch (error) {
-      console.error("Error fetching data:", error);
+      toast.error("Error fetching data:", error);
     }
   };
 
@@ -56,46 +56,71 @@ export const Provider = ({ children }) => {
     setCategoryProduct(filtered);
   };
 
-  // Add to Cart
+
+
+
+
   const handleCardItem = (name, price, quantity) => {
-    setCardItems((prevItems) => {
-      const existingItem = prevItems.find((item) => item.name === name);
-      
-      if (existingItem) {
-        // If item exists, update quantity
-        return prevItems.map((item) =>
-          item.name === name ? { ...item, quantity: item.quantity + quantity } : item
-        );
-      } else {
-        // If item doesn't exist, add new item
-        return [{ id: crypto.randomUUID(), name, price, quantity }, ...prevItems];
-      }
-    });
+   
+    const existingItem = cardItems.find((item) => item.name === name);
+    let updatedCart;
   
-    window.alert("Item added successfully");
+    if (existingItem) {
+      updatedCart = cardItems.map((item) =>
+        item.name === name ? { ...item, quantity: item.quantity + quantity } : item
+      );
+    } else {
+      updatedCart = [...cardItems, { _id: crypto.randomUUID(), name, price, quantity }];
+    }
+    handleCartChange(updatedCart);
+    toast.success("item added..")
   };
   
 
   
+
+  const handleCartChange = async (updatedCart) => {
+    
+    
   
+    try {
+      
+      await fetch('https://fresh-fruits-backend.onrender.com/api/cart/update', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${user.token}`
+        },
+        body: JSON.stringify({ cart: updatedCart })
+      });
+     
+    } catch (error) {
+      toast.error('Please Login..');
+  
+    }
+
+    setCardItems(updatedCart);
+  };
   
 
+  const addProduct = async (newProduct) => {
 
-  const addProduct = async(newProduct) => {
-    console.log(newProduct)
     const response = await fetch("https://fresh-fruits-backend.onrender.com/api/item/add", {
-      method: "POST",
-      headers: {
-          "Content-Type": "application/json",
-      },
-      body: JSON.stringify(newProduct),
+        method: "POST",
+        body: newProduct,
     });
 
-    const data = response.json()
+    if (!response.ok) {
+        toast.error("Failed to add product");
+        return;
+    }
+
+    const data = await response.json();
     setNewProducts(data);
 
-    window.alert("Product added successfully");
-  };
+    toast.success("Product added successfully");
+};
+
 
 
 
@@ -109,22 +134,20 @@ export const Provider = ({ children }) => {
             body: JSON.stringify(formData),
         });
 
-        if (!response.ok) {
-            throw new Error(`Error: ${response.status} - ${response.statusText}`);
-        }
-
         const data = await response.json();
-        
-        localStorage.setItem("userdetail", JSON.stringify(data));
 
-
-        console.log("Stored User Data:", JSON.parse(localStorage.getItem("userdetail")));
-
-
-        setUser(data);
+        if (data.token) {
+          localStorage.setItem("token", JSON.stringify(data));
+          setUser(localStorage.getItem("token"));
+          toast.success('Successfully Login')
+      } 
+      else {
+          toast.error('Invalid Credentials')
+      }
 
     } catch (error) {
-        console.error("Login Error:", error.message);
+
+        toast.error('Something went wrong....')
     }
 };
 
@@ -138,22 +161,27 @@ export const Provider = ({ children }) => {
             body: JSON.stringify(formData),
         });
 
-        if (!response.ok) {
-            throw new Error(`Error: ${response.status} - ${response.statusText}`);
-        }
+
 
         const data = await response.json();
-        localStorage.setItem("userdetail",JSON.stringify(data))
-        setUser(data)
+        if (data.token) {
+          localStorage.setItem("token", JSON.stringify(data));
+          setUser(localStorage.getItem("token"));
+          toast.success('Successfully Register!')
+      } else {
+        toast.error('Email Already Register')
+
+      }
         
     } catch (error) {
-        console.error("Register Error:", error.message);
+        toast.error('Something went wrong....')
     }
 };
 
  const Logout = () => {
   setUser(null)
-  localStorage.removeItem("userDetail")
+  localStorage.removeItem("token")
+  toast.success('logged out')
  }
 
 
@@ -176,7 +204,8 @@ export const Provider = ({ children }) => {
         handleRegister,
         user,
         Logout,
-        setUser
+        setUser,
+        handleCartChange
       }}
     >
       {children}
