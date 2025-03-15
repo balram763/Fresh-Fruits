@@ -1,9 +1,9 @@
 import React, { useContext, useEffect, useState } from 'react'
 import ShoppingContext from '../providers/ShoppingContext'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link,useNavigate } from 'react-router-dom'
 
 const Login = () => {
-    const {handleLogin,user,token} = useContext(ShoppingContext)
+    const {handleLogin,user} = useContext(ShoppingContext)
     const Navigate = useNavigate()
 
 
@@ -84,9 +84,6 @@ const Login = () => {
              Log In
           </button>
         </form>
-        <Link to="/Register" className="text-primary mt-4 fw-bold">
-            Don't have an account? Sign Up
-          </Link>
     </div>
     </div>
     </>
@@ -94,5 +91,3 @@ const Login = () => {
 }
 
 export default Login
-
-

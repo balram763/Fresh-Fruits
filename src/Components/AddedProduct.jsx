@@ -1,5 +1,7 @@
-import React, { } from 'react'
+import React from 'react'
 import useFetch from '../hooks/useFetch'
+
+
 import Card from './Card'
 
 const AddedProduct = () => {
