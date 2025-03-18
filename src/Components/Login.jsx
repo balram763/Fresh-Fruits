@@ -85,7 +85,7 @@ const Login = () => {
           </button>
         </form>
         <Link to="/register" className="text-primary mt-4 fw-bold">
-                Already have account? LogIn
+                Don't have an account? Register
               </Link>
     </div>
     </div>
