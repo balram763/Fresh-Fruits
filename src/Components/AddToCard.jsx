@@ -20,7 +20,7 @@ const AddToCard = () => {
            token = parsedToken.token
            setUser(parsedToken); 
         } catch (error) {
-          navigate('/register')
+          
           toast.error("Login...");
           
         }
@@ -36,7 +36,8 @@ const AddToCard = () => {
             setCardItems(data);
         
     } catch (error) {
-        toast.error("Error fetching cart:", error);
+      navigate('/register')
+        // toast.error("Error fetching cart:", error);
     }
 };
 
