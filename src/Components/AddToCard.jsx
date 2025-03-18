@@ -36,7 +36,7 @@ const AddToCard = () => {
             setCardItems(data);
         
     } catch (error) {
-      navigate('/register')
+      navigate('/login')
         // toast.error("Error fetching cart:", error);
     }
 };
