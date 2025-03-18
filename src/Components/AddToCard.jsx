@@ -8,7 +8,7 @@ import toast from 'react-hot-toast';
 const AddToCard = () => {
   
   const {cardItems,user,setCardItems,setUser} = useContext(ShoppingContext)
-  const Navigate = useNavigate()
+  const navigate = useNavigate()
 
   const fetchCart = async () => {
     let token;
@@ -20,8 +20,9 @@ const AddToCard = () => {
            token = parsedToken.token
            setUser(parsedToken); 
         } catch (error) {
+          navigate('/login')
           toast.error("Login...");
-          Navigate('/login')
+          
         }
       }
     try {
