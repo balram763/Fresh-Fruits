@@ -20,7 +20,7 @@ const AddToCard = () => {
            token = parsedToken.token
            setUser(parsedToken); 
         } catch (error) {
-          navigate('/login')
+          navigate('/register')
           toast.error("Login...");
           
         }
