@@ -1,10 +1,14 @@
 import React, { useContext, useEffect, useState } from 'react'
 import ShoppingContext from '../providers/ShoppingContext'
-import {Link, useParams } from 'react-router-dom';
+import {Link, useNavigate, useParams } from 'react-router-dom';
+import toast from 'react-hot-toast';
 
 const PageDetail = () => {
+  const {setCardItems,setUser} = useContext(ShoppingContext)
+  const Navigate = useNavigate()
 
   const { id } = useParams();
+
 
   let [count,setCount] = useState(1)
   const [singleproduct,setSingleProduct] = useState([])
@@ -14,8 +18,40 @@ const PageDetail = () => {
     const data = await response.json()
     setSingleProduct(data)
   }
+
+  const fetchCart = async () => {
+    let token;
+    const storedToken = localStorage.getItem("token");
+      if (storedToken) {
+        try {
+          const parsedToken = JSON.parse(storedToken);
+           token = parsedToken.token
+           setUser(parsedToken); 
+           const response = await fetch("https://fresh-fruits-backend.onrender.com/api/cart", {
+            headers: {
+                Authorization: `Bearer ${token}`,
+                "Content-Type": "application/json",
+            },
+        });
+            const data = await response.json();
+            setCardItems(data);
+            localStorage.setItem('cartItem',data)
+        } catch (error) {
+          toast.error("Login...");
+          
+        }
+      }
+    // try {
+        
+            
+        
+    // }
+    
+
+};
   
   useEffect(()=>{
+    fetchCart()
     handleFetch(id)
   },[])
   

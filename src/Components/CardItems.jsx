@@ -1,9 +1,11 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import ShoppingContext from '../providers/ShoppingContext';
 import toast from 'react-hot-toast';
 
 const CardItems = ({ item }) => {
   const { cardItems, setCardItems, user, handleCartChange } = useContext(ShoppingContext);
+  const [loading,setLoading] = useState(false)
+
 
   const updateQuantity = (change) => {
     const updatedItems = cardItems.map((cartItem) =>
@@ -14,31 +16,64 @@ const CardItems = ({ item }) => {
     handleCartChange(updatedItems);
   };
 
+  // const handleDelete = async () => {
+  //   const updatedItems = cardItems.filter((cartItem) => cartItem._id !== item._id);
+  //   try {
+  //     await fetch('https://fresh-fruits-backend.onrender.com/api/cart/update', {
+  //       method: 'POST',
+  //       headers: {
+  //         'Content-Type': 'application/json',
+  //         Authorization: `Bearer ${user.token}`,
+  //       },
+  //       body: JSON.stringify({ cart: updatedItems }),
+  //     });
+  //     toast.success('Item Deleted')
+  //   } catch (error) {
+  //     toast.error('Something went wrong')
+   
+  //   }
+
+  //   setCardItems(updatedItems);
+  // };
+
   const handleDelete = async () => {
     const updatedItems = cardItems.filter((cartItem) => cartItem._id !== item._id);
-    try {
-      await fetch('https://fresh-fruits-backend.onrender.com/api/cart/update', {
+  
+    setLoading(true);
+  
+    // Using toast.promise for async feedback
+    await toast.promise(
+      fetch('https://fresh-fruits-backend.onrender.com/api/cart/update', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${user.token}`,
+          Authorization: `Bearer ${user?.token}`,
         },
         body: JSON.stringify({ cart: updatedItems }),
+      }),
+      {
+        loading: 'Deleting item...',
+        success: 'Item deleted successfully!',
+        error: 'Failed to delete item. Please try again.',
+      }
+    )
+      .then(() => {
+        setCardItems(updatedItems);
+      })
+      .catch((error) => {
+        console.error('Error deleting item:', error);
+      })
+      .finally(() => {
+        setLoading(false);
       });
-      toast.success('Item Deleted')
-    } catch (error) {
-      toast.error('Something went wrong')
-   
-    }
-
-    setCardItems(updatedItems);
   };
+  
 
   return (
-    <div className="col col-lg-6 col-md-12 col-sm-12 col-xs-12">
-      <div className="card p-3 shadow w-100">
-        <div className="d-flex align-items-center justify-content-between w-100">
-          <h4 className="fw-bold text-dark">{item.name}</h4>
+    <div className="col  col-lg-6 col-md-12 col-sm-12 col-xs-12">
+      <div className="card p-3 shadow  w-100">
+        <div className="d-flex align-items-center  justify-content-between w-100">
+          <h4 className="fw-bold text-dark ">{item.name}</h4>
           <div className="d-flex align-items-center">
             <button 
               onClick={() => updateQuantity(-1)} 

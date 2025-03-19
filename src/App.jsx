@@ -40,10 +40,10 @@ const App = () => {
 
   return (
     <>
+    
     <Router>
       <Navbar />
       <Routes>
-   
         <Route path='/' element={ <CardSection/> }/>
         <Route path='/login' element={ <Login/> }/>
         <Route path='/user/profile' element={ <Profile/> }/>

@@ -9,6 +9,7 @@ const Card = ({ user }) => {
 
   return (
     <>
+    
       <div className="card m-3 p-2 d-flex" style={{ width: '200px', height: '350px' }}>
         <img src={user?.img.startsWith('/upload') ? `https://fresh-fruits-backend.onrender.com${user.img}` : user?.img} className="card-img-top" alt="..." style={{ height: '20vh', objectFit: 'cover' }} />
         <div className="card-body">

@@ -10,13 +10,24 @@ import toast from 'react-hot-toast'
 const CardSection = () => {
     const {product,handleCategory,categoryProduct,setUser,setCardItems} = useContext(ShoppingContext)
 
+    // console.log(product)
+    
+    const suggestions = product.slice(Math.floor(Math.random()*25))
+      console.log(suggestions)
+
+      const bestSeller = product.filter((item)=> item?.bestSeller == true)
+      console.log(bestSeller)
+    
+
  
     
     useEffect(() => {
       const storedToken = localStorage.getItem("token");
+      
     
       if (storedToken) {
         try {
+          fetchCart(storedToken)
           const parsedToken = JSON.parse(storedToken);
           setUser(parsedToken); 
           
@@ -27,7 +38,7 @@ const CardSection = () => {
 
       
 
-      fetchCart(storedToken)
+      
     }, []);
 
 
@@ -35,7 +46,7 @@ const CardSection = () => {
       const parsedToken = JSON.parse(storedToken);
       const response = await fetch("https://fresh-fruits-backend.onrender.com/api/cart", {
         headers: {
-            Authorization: `Bearer ${parsedToken.token}`,
+            Authorization: `Bearer ${parsedToken?.token}`,
             "Content-Type": "application/json",
         },
     });
@@ -92,6 +103,15 @@ const CardSection = () => {
         <div style={{ maxHeight : '410px',minHeight : '0px'}} className="overflow-x-auto  card p-1 shadow d-flex flex-column flex-wrap  mt-2">
         {
         categoryProduct.map((user)=> <Card user={user} key={user._id}/> )
+    }
+        </div>
+    </div>
+    <div className="container p-1">
+    <h4 className='p-2 mt-5'>Suggestions... </h4>
+      
+        <div style={{ maxHeight : '410px',minHeight : '0px'}} className="overflow-x-auto  card p-1 shadow d-flex flex-column flex-wrap  mt-2">
+        {
+        suggestions.map((user)=> <Card user={user} key={user._id}/> )
     }
         </div>
     </div>
