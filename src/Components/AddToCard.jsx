@@ -26,7 +26,9 @@ const AddToCard = () => {
           
         }
       }
+      
     try {
+      if(storedToken){
       setLoading(true)
         const response = await fetch("https://fresh-fruits-backend.onrender.com/api/cart", {
             headers: {
@@ -38,6 +40,9 @@ const AddToCard = () => {
             setCardItems(data);
             localStorage.setItem('cartItem',data)
             
+      }else{
+        Navigate('/login')
+      }
         
     } catch (error) {
 
@@ -47,6 +52,9 @@ const AddToCard = () => {
       setLoading(false)
 
     }
+  
+    
+  
 
 };
 

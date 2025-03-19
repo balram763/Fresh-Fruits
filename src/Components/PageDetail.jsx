@@ -2,13 +2,18 @@ import React, { useContext, useEffect, useState } from 'react'
 import ShoppingContext from '../providers/ShoppingContext'
 import {Link, useNavigate, useParams } from 'react-router-dom';
 import toast from 'react-hot-toast';
+import Card from './Card';
 
 const PageDetail = () => {
-  const {setCardItems,setUser} = useContext(ShoppingContext)
-  const Navigate = useNavigate()
+  const {setCardItems,setUser,bestSeller,handleCardItem,suggestions} = useContext(ShoppingContext)
+
 
   const { id } = useParams();
+  
 
+  useEffect(()=>{
+    handleFetch(id)
+  },[id])
 
   let [count,setCount] = useState(1)
   const [singleproduct,setSingleProduct] = useState([])
@@ -41,57 +46,99 @@ const PageDetail = () => {
           
         }
       }
-    // try {
-        
-            
-        
-    // }
-    
-
 };
   
   useEffect(()=>{
     fetchCart()
     handleFetch(id)
   },[])
-  
-  const {product,handleCardItem} = useContext(ShoppingContext)  
+
+
   const total = count * singleproduct?.price
 
 
   
   return (
+
     <>
-
-    <div className="container p-3 shadow mt-3 w-50" >
-      <h3 className=" text-center">PRODUCT DETAILS</h3>
-      <div className="d-flex flex-wrap">
-      <div>
-      <img src={singleproduct?.img?.startsWith('/uploads') ? `https://fresh-fruits-backend.onrender.com${singleproduct?.img}` : singleproduct?.img} alt="" style={{width:'50vw',height:'45vh',objectFit:'contain'}}/>
-      </div>
-      <div className='text-center d-flex flex-column align-items-center flex-wrap justify-content-center w-100'>
-      <h4 className='card-title'>{singleproduct?.name}</h4>
-      <p className='card-text'>{singleproduct?.description}</p>
-      
- 
-      <h2 className='text-warning'>{count} * {singleproduct.price} = {total}</h2>
- 
-
-      <div className="d-flex flex-row my-3">
-      <button onClick={(e)=>{if(count>0){setCount(count-1)}}} className="btn btn-primary">-</button>
-      <h4 className='text-primary mx-4'>{count}</h4>
-      <button onClick={(e)=>setCount(count+1)} className="btn btn-warning">+</button>
+  <div className="container p-4 shadow mt-3 rounded" style={{ maxWidth: "900px" }}>
+    <h3 className="text-center fw-bold">PRODUCT DETAILS</h3>
+    <div className="row align-items-center mt-3">
+      {/* Product Image */}
+      <div className="col-lg-6 col-md-6 col-12 text-center">
+        <img
+          src={singleproduct?.img?.startsWith('/uploads') ? 
+               `https://fresh-fruits-backend.onrender.com${singleproduct?.img}` 
+               : singleproduct?.img}
+          alt=""
+          className="img-fluid rounded"
+          style={{ maxHeight: "350px", objectFit: "contain" }}
+        />
       </div>
 
+      {/* Product Details */}
+      <div className="col-lg-6 col-md-6 col-12 text-center d-flex flex-column align-items-center">
+        <h4 className="fw-bold">{singleproduct?.name}</h4>
+        <p className="text-muted">{singleproduct?.description}</p>
+
+        <h2 className="text-warning">
+          {count} × {singleproduct.price} = {total}
+        </h2>
+
+        {/* Quantity Controls */}
+        <div className="d-flex align-items-center my-3">
+          <button 
+            onClick={() => { if (count > 0) setCount(count - 1); }} 
+            className="btn btn-primary"
+          >
+            -
+          </button>
+          <h4 className="text-primary mx-3">{count}</h4>
+          <button 
+            onClick={() => setCount(count + 1)} 
+            className="btn btn-warning"
+          >
+            +
+          </button>
+        </div>
 
 
-      <Link to={'/AddtoCard'} onClick={()=>handleCardItem(singleproduct.name,singleproduct.price,count)}  className="btn  btn-danger p-2 mt-4">Add To card</ Link>
+        <Link
+          to={'/AddtoCard'}
+          onClick={() => handleCardItem(singleproduct.name, singleproduct.price, count)}
+          className="btn btn-danger px-4 py-2 mt-3 fw-bold"
+        >
+          Add To Cart
+        </Link>
       </div>
-      </div>
-      
     </div>
-    
-    </>
+  </div>
+
+  <div className="container mt-5">
+    <h4 className="fw-bold">Best Sellers</h4>
+    <div 
+      style={{ maxHeight: "410px", overflowX: "auto" }} 
+      className="card p-3 shadow mt-3 d-flex flex-column flex-wrap"
+    >
+      {bestSeller.map((user) => (
+        <Card user={user} key={user._id} />
+      ))}
+    </div>
+  </div>
+
+  <div className="container mt-5">
+    <h4 className="fw-bold">Suggestions</h4>
+    <div 
+      style={{ maxHeight: "410px", overflowX: "auto" }} 
+      className="card p-3 shadow mt-3 d-flex flex-column flex-wrap"
+    >
+      {suggestions.map((user) => (
+        <Card user={user} key={user._id} />
+      ))}
+    </div>
+  </div>
+</>
+
   )
 }
 

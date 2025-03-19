@@ -16,25 +16,7 @@ const CardItems = ({ item }) => {
     handleCartChange(updatedItems);
   };
 
-  // const handleDelete = async () => {
-  //   const updatedItems = cardItems.filter((cartItem) => cartItem._id !== item._id);
-  //   try {
-  //     await fetch('https://fresh-fruits-backend.onrender.com/api/cart/update', {
-  //       method: 'POST',
-  //       headers: {
-  //         'Content-Type': 'application/json',
-  //         Authorization: `Bearer ${user.token}`,
-  //       },
-  //       body: JSON.stringify({ cart: updatedItems }),
-  //     });
-  //     toast.success('Item Deleted')
-  //   } catch (error) {
-  //     toast.error('Something went wrong')
-   
-  //   }
 
-  //   setCardItems(updatedItems);
-  // };
 
   const handleDelete = async () => {
     const updatedItems = cardItems.filter((cartItem) => cartItem._id !== item._id);

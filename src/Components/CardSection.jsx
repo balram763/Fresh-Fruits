@@ -1,4 +1,3 @@
-
 import React, { useContext, useEffect, useState } from 'react'
 import Card from './Card'
 import ShoppingContext from '../providers/ShoppingContext'
@@ -8,19 +7,10 @@ import Footer from './Footer'
 import toast from 'react-hot-toast'
 
 const CardSection = () => {
-    const {product,handleCategory,categoryProduct,setUser,setCardItems} = useContext(ShoppingContext)
+    const {product,handleCategory,categoryProduct,setUser,setCardItems,bestSeller,suggestions} = useContext(ShoppingContext)
 
     // console.log(product)
-    
-    const suggestions = product.slice(Math.floor(Math.random()*25))
-      console.log(suggestions)
-
-      const bestSeller = product.filter((item)=> item?.bestSeller == true)
-      console.log(bestSeller)
-    
-
- 
-    
+  
     useEffect(() => {
       const storedToken = localStorage.getItem("token");
       
@@ -116,6 +106,16 @@ const CardSection = () => {
         </div>
     </div>
 
+    <div className="container p-1">
+    <h4 className='p-2 mt-5'>Best Seller... </h4>
+      
+        <div style={{ maxHeight : '410px',minHeight : '0px'}} className="overflow-x-auto  card p-1 shadow d-flex flex-column flex-wrap  mt-2">
+        {
+        bestSeller.map((user)=> <Card user={user} key={user._id}/> )
+    }
+        </div>
+    </div>
+
 
     <div className="container p-1">
       <h4 className='p-2 mt-5'>Recently Added Product... </h4>
@@ -134,3 +134,6 @@ const CardSection = () => {
 }
 
 export default CardSection
+
+
+

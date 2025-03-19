@@ -12,6 +12,9 @@ export const Provider = ({ children }) => {
   const [user,setUser] = useState(null)
   const [loading,setLoading] = useState(false)
   const [isError,setIsError] = useState(false)
+
+  const bestSeller = product.filter((item)=>item.bestSeller)
+   const suggestions = product.slice(Math.floor(Math.random()*25))
   const getData = async () => {
     try {
       const response = await fetch("https://fresh-fruits-backend.onrender.com/api/item");
@@ -75,71 +78,14 @@ export const Provider = ({ children }) => {
       updatedCart = [...cardItems, { _id: crypto.randomUUID(), name, price, quantity }];
     }
     handleCartChange(updatedCart);
-    // toast.success("item added..")
+
   };
-  
-
-  
-
-  // const handleCartChange = async (updatedCart) => {
-  //   setLoading(true)
-    
-    
-  
-  //   try {
-      
-  //     await fetch('https://fresh-fruits-backend.onrender.com/api/cart/update', {
-  //       method: 'POST',
-  //       headers: {
-  //         'Content-Type': 'application/json',
-  //         Authorization: `Bearer ${user.token}`
-  //       },
-  //       body: JSON.stringify({ cart: updatedCart })
-  //     });
-     
-  //   } catch (error) {
-  //     toast.error('Please Login..');
-  
-  //   }
-
-  //   setCardItems(updatedCart);
-  // };
-
-  // const handleCartChange = async (updatedCart) => {
-  //   setLoading(true);
-    
-  
-  //   await toast.promise(
-  //     fetch('https://fresh-fruits-backend.onrender.com/api/cart/update', {
-  //       method: 'POST',
-  //       headers: {
-  //         'Content-Type': 'application/json',
-  //         Authorization: user?.token ? `Bearer ${user?.token}` : '',
-  //       },
-  //       body: JSON.stringify({ cart: updatedCart }),
-  //     }),
-  //     {
-  //       loading: 'Updating cart...',
-  //       success: 'Cart updated successfully!',
-  //       error: 'Failed to update cart. Please login.',
-  //     }
-  //   )
-  //     .then(() => {
-  //       setCardItems(updatedCart);
-  //     })
-  //     .catch((error) => {
-  //       setIsError(true)
-  //       console.error('Error updating cart:', error);
-  //     })
-  //     .finally(() => {
-  //       setLoading(false);
-  //     })
-      
-  // };
   
 
   const handleCartChange = async (updatedCart) => {
     setLoading(true);
+
+    if(user){
   
     await toast.promise(
       (async () => {
@@ -156,7 +102,7 @@ export const Provider = ({ children }) => {
           throw new Error('Failed to update cart. Please login.');
         }
   
-        setCardItems(updatedCart); // Update cart items if the request is successful
+        setCardItems(updatedCart);
       })(),
       {
         loading: 'Updating cart...',
@@ -166,11 +112,13 @@ export const Provider = ({ children }) => {
     )
       .catch((error) => {
         setIsError(true);
-        // console.error('Error updating cart:', error);
       })
       .finally(() => {
         setLoading(false);
       });
+    }else{
+      toast.error('Please Login...')
+    }
   };
   
   
@@ -277,7 +225,9 @@ export const Provider = ({ children }) => {
         user,
         Logout,
         setUser,
-        handleCartChange
+        handleCartChange,
+        bestSeller,
+        suggestions
       }}
     >
       {children}
