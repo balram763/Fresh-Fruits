@@ -6,15 +6,11 @@ import { useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
 
 const AddToCard = () => {
-<<<<<<< HEAD
-  
-  const {cardItems,user,setCardItems,setUser} = useContext(ShoppingContext)
-  const navigate = useNavigate()
-=======
+
   const {cardItems,setCardItems,setUser} = useContext(ShoppingContext)
   const Navigate = useNavigate()
   const [loading,setLoading] = useState(false)
->>>>>>> 09bcbdd (bestSeller)
+
 
   const fetchCart = async () => {
     let token;
@@ -44,15 +40,12 @@ const AddToCard = () => {
             
         
     } catch (error) {
-<<<<<<< HEAD
-      navigate('/login')
-        // toast.error("Error fetching cart:", error);
-=======
+
       Navigate('/login')
         // toast.error("Error fetching cart:", error);
     } finally{
       setLoading(false)
->>>>>>> 09bcbdd (bestSeller)
+
     }
 
 };

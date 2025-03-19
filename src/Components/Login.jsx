@@ -84,15 +84,11 @@ const Login = () => {
              Log In
           </button>
         </form>
-<<<<<<< HEAD
-        <Link to="/register" className="text-primary mt-4 fw-bold">
-                Don't have an account? Register
-              </Link>
-=======
+
         <Link to="/Register" className="text-primary mt-4 fw-bold">
             Don't have an account? Sign Up
           </Link>
->>>>>>> 09bcbdd (bestSeller)
+
     </div>
     </div>
     </>
