@@ -53,7 +53,7 @@ const Register = () => {
         <div   className="card mt-3 p-4 shadow-lg rounded-3" style={{ width: "380px",height:'75vh' }}>
             <form onSubmit={(e)=>handleSubmit(e)}>
             <div className="my-3">
-                  <label className="form-label fw-bold">Email</label>
+                  <label className="form-label fw-bold">Name</label>
                    <input
                   name="name"
                   value={formData.name}
