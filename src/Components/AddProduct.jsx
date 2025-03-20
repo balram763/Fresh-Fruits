@@ -9,7 +9,6 @@ const AddProduct = () => {
     const [qty,setQty] = useState('')
     const [category,setCategory] = useState('')
     const [image,setImage] = useState('')
-    //
 
     const [isBestSeller, setIsBestSeller] = useState(true);
 

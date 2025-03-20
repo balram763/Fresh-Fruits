@@ -162,59 +162,86 @@ export const Provider = ({ children }) => {
 
 
 
-  const handleLogin = async (formData) => {
-    try {
-        const response = await fetch("https://fresh-fruits-backend.onrender.com/api/user/login", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify(formData),
-        });
+//   const handleLogin = async (formData) => {
+//     try {
+//         const response = await fetch("https://fresh-fruits-backend.onrender.com/api/user/login", {
+//             method: "POST",
+//             headers: {
+//                 "Content-Type": "application/json",
+//             },
+//             body: JSON.stringify(formData),
+//         });
 
-        const data = await response.json();
+//         const data = await response.json();
 
-        if (data.token) {
+//         if (data.token) {
+//           localStorage.setItem("token", JSON.stringify(data));
+//           setUser(localStorage.getItem("token"));
+//           toast.success('Successfully Login')
+//       } 
+//       else {
+//           toast.error('Invalid Credentials')
+//       }
+
+//     } catch (error) {
+
+//         toast.error('Something went wrong....')
+//     }
+// };
+
+const handleLogin = async (formData) => {
+  const loginPromise = fetch("https://fresh-fruits-backend.onrender.com/api/user/login", {
+      method: "POST",
+      headers: {
+          "Content-Type": "application/json",
+      },
+      body: JSON.stringify(formData),
+  }).then(async (response) => {
+      if (!response.ok) throw new Error("Invalid Credentials");
+      const data = await response.json();
+      if (data) {
           localStorage.setItem("token", JSON.stringify(data));
-          setUser(localStorage.getItem("token"));
-          toast.success('Successfully Login')
-      } 
-      else {
-          toast.error('Invalid Credentials')
-      }
-
-    } catch (error) {
-
-        toast.error('Something went wrong....')
-    }
-};
-
-  const handleRegister = async (formData) => {
-    try {
-        const response = await fetch("https://fresh-fruits-backend.onrender.com/api/user/register", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify(formData),
-        });
-
-
-
-        const data = await response.json();
-        if (data.token) {
-          localStorage.setItem("token", JSON.stringify(data));
-          setUser(localStorage.getItem("token"));
-          toast.success('Successfully Register!')
+          setUser(data);
+          return "Successfully Logged In!";
       } else {
-        toast.error('Email Already Register')
-
+          throw new Error("Invalid Credentials");
       }
-        
-    } catch (error) {
-        toast.error('Something went wrong....')
-    }
+  });
+
+  toast.promise(loginPromise, {
+      loading: "Logging in...",
+      success: (msg) => msg,
+      error: (err) => err.message || "Something went wrong...",
+  });
+
+  
 };
+
+
+
+const handleRegister = async (formData) => {
+  const registerPromise = fetch("https://fresh-fruits-backend.onrender.com/api/user/register", {
+      method: "POST",
+      headers: {
+          "Content-Type": "application/json",
+      },
+      body: JSON.stringify(formData),
+  }).then(async (response) => {
+      if (!response.ok) throw new Error("Email Already Registered");
+
+      const data = await response.json();
+      localStorage.setItem("token", JSON.stringify(data));
+      setUser(data);
+      return "Successfully Registered!";
+  });
+
+  toast.promise(registerPromise, {
+      loading: "Registering...",
+      success: (msg) => msg,
+      error: (err) => err.message || "Something went wrong...",
+  });
+};
+
 
  const Logout = () => {
   setUser(null)
