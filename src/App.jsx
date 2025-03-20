@@ -13,17 +13,18 @@ import Profile from './Components/Profile';
 
 const App = () => {
 
-  const {product,getData} = useContext(ShoppingContext)
+  const {isLoading,setUser} = useContext(ShoppingContext)
   
   useEffect(()=>{
-    getData()
     const token  = localStorage.getItem('token')
+    const parsedToken  = JSON.parse(localStorage.getItem('token'))
+    setUser(parsedToken)
   },[])
 
   
 
 
-  if(product.length === 0){
+  if(isLoading){
     return(
 
 
