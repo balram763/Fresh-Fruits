@@ -35,8 +35,7 @@ const Footer = () => {
 <div className="bg-light py-5">
       <div className="container">
         <div className="row text-center">
-          
-          {/* Best Price */}
+
           <div className="col-md-4 mb-4">
             <div className="card border-0 shadow p-4 rounded hover-effect">
               <div className="card-body">
@@ -49,7 +48,6 @@ const Footer = () => {
             </div>
           </div>
 
-          {/* 100% Organic */}
           <div className="col-md-4 mb-4">
             <div className="card border-0 shadow p-4 rounded hover-effect">
               <div className="card-body">
@@ -62,7 +60,6 @@ const Footer = () => {
             </div>
           </div>
 
-          {/* Freshness Guaranteed */}
           <div className="col-md-4 mb-4">
             <div className="card border-0 shadow p-4 rounded hover-effect">
               <div className="card-body">
@@ -79,23 +76,25 @@ const Footer = () => {
       </div>
     </div>
 
-      {/* <div className="border-bottom border-primary"></div> */}
 
       <FooterDown/>
       <div className="container d-flex flex-column flex-md-row align-items-center justify-content-between py-3">
 
         <ol className="list-group list-group-horizontal gap-3">
           <li className="fs-2 list-group-item border-0">
-            <i className="fa-brands fa-square-instagram text-danger hover-scale"></i>
+          <a href="https://www.instagram.com/balram_dhakad1" target="_blank"  className="fs-2 list-group-item border-0 text-dark">
+          <i className="fa-brands fa-square-instagram text-danger hover-scale"></i>
+          </a>
+            
           </li>
-          <a href="https://github.com/balram763" className="fs-2 list-group-item border-0 text-dark">
+          <a href="https://github.com/balram763" target="_blank"  className="fs-2 list-group-item border-0 text-dark">
             <i className="fa-brands fa-github hover-scale"></i>
           </a>
-          <a href="#" className="fs-2 list-group-item border-0 text-primary">
+          <a href="https://www.linkedin.com/in/balram-dhakad-a996bb209" target="_blank"  className="fs-2 list-group-item border-0 text-primary">
             <i className="fa-brands fa-linkedin hover-scale"></i>
           </a>
-          <a href="#" className="fs-2 list-group-item border-0 text-primary">
-            <i className="fa-brands fa-facebook hover-scale"></i>
+          <a href="https://x.com/balram763" target="_blank"  className="fs-2 list-group-item border-0 text-primary">
+            <i className="fa-brands fa-x hover-scale"></i>
           </a>
         </ol>
 
