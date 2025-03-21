@@ -33,44 +33,37 @@ const Footer = () => {
   return (
     <footer className="bg-white py-4 border-top shadow-sm">
       <div className="container text-center">
-        
-        {/* Brand Name */}
+
         <h4 className="text-danger fw-bold mb-2">FreshFruits99</h4>
         <p className="mb-3 text-muted">
-          Bringing you the freshest, healthiest, and most organic fruits—straight from farm to your doorstep.
+          Bringing you the freshest, healthiest, and most organic fruits straight from farm to your doorstep.
         </p>
 
-        {/* Divider */}
-        <hr className="w-50 mx-auto text-muted"/>
 
-        {/* Navigation Links */}
         <div className="row justify-content-center text-center">
-          <div className="col-12 col-md-auto mb-2">
-            <Link to="/about" className="text-secondary text-decoration-none fw-semibold hover-effect">
+          <div className="col-12 col-md-auto mt-2">
+            <Link to="/about" className="text-primary text-decoration-none fw-semibold hover-effect">
               About Us
             </Link>
           </div>
-          <div className="col-12 col-md-auto mb-2">
-            <span className="text-muted">|</span>
+          <div className="col-12 col-md-auto mb-1">
           </div>
-          <div className="col-12 col-md-auto mb-2">
-            <a href="mailto:support@freshfruits.com" className="text-secondary text-decoration-none fw-semibold hover-effect">
+          <div className="col-12 col-md-auto mb-1 ">
+            <a href="mailto:support@freshfruits.com" className="text-primary text-decoration-none fw-semibold hover-effect">
               Contact: support@freshfruits.com
             </a>
           </div>
-          <div className="col-12 col-md-auto mb-2">
-            <span className="text-muted">|</span>
+          <div className="col-12 col-md-auto mb-1">
           </div>
-          <div className="col-12 col-md-auto mb-2">
-            <Link to="/privacy" className="text-secondary text-decoration-none fw-semibold hover-effect">
+          <div className="col-12 col-md-auto mb-1">
+            <Link to="/privacy" className="text-primary text-decoration-none fw-semibold hover-effect">
               Privacy Policy
             </Link>
           </div>
           <div className="col-12 col-md-auto mb-2">
-            <span className="text-muted">|</span>
           </div>
           <div className="col-12 col-md-auto mb-2">
-            <Link to="/faq" className="text-secondary text-decoration-none fw-semibold hover-effect">
+            <Link to="/faq" className="text-primary text-decoration-none fw-semibold hover-effect">
               FAQ
             </Link>
           </div>
