@@ -12,7 +12,8 @@ const Card = ({ user }) => {
         style={{ width: '200px', height: '350px' }}>
         
         <img 
-          src={user?.img.startsWith('/upload') ? `https://fresh-fruits-backend.onrender.com${user.img}` : user?.img} 
+          src={user?.img} 
+          loading='lazy'
           className="card-img-top rounded-top img-fluid"
           alt="Product"
           style={{ height: '150px', objectFit: 'cover' }} 
@@ -24,7 +25,7 @@ const Card = ({ user }) => {
         </div>
 
         <div className="d-flex flex-column p-2">
-          <Link to={`/${user._id}`} className="btn btn-sm btn-outline-success fw-bold mb-1">
+          <Link to={`/product/${user._id}`} className="btn btn-sm btn-outline-success fw-bold mb-1">
             Read More
           </Link>
           <Link to={'/AddToCard'}  

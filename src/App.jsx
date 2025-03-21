@@ -1,62 +1,58 @@
-import React, { useContext, useEffect } from 'react'
-import Navbar from './Components/Navbar'
-import ShoppingContext from './providers/ShoppingContext'
-import CardSection from './Components/CardSection'
+import React, { useContext, useEffect, lazy, Suspense } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import PageDetail from './Components/PageDetail';
-import AddToCard from './Components/AddToCard';
-import AddProduct from './Components/AddProduct';
-import Login from './Components/Login';
-import Register from './Components/Register';
-import Profile from './Components/Profile';
+import Navbar from "./Components/Navbar";
+import ShoppingContext from "./providers/ShoppingContext";
+import CardSection from "./Components/CardSection"; 
+import Loading from "./Components/Loading";
+
+const PageDetail = lazy(() => import("./Components/PageDetail"));
+const AddToCard = lazy(() => import("./Components/AddToCard"));
+const AddProduct = lazy(() => import("./Components/AddProduct"));
+const Login = lazy(() => import("./Components/Login"));
+const Register = lazy(() => import("./Components/Register"));
+const Profile = lazy(() => import("./Components/Profile"));
+const PageNotFound = lazy(()=> import("./Components/PageNotFound"))
+const About = lazy(()=>import("./Components/About"))
+const Privacy = lazy(()=>import("./Components/Privacy"))
+const Faq = lazy(()=>import("./Components/Faq"))
 
 
 const App = () => {
+  const { setUser } = useContext(ShoppingContext);
 
-  const {isLoading,setUser} = useContext(ShoppingContext)
-  
-  useEffect(()=>{
-    const token  = localStorage.getItem('token')
-    const parsedToken  = JSON.parse(localStorage.getItem('token'))
-    setUser(parsedToken)
-  },[])
-
-  
-
-
-  if(isLoading){
-    return(
-
-
-
-      <div className=" container d-flex align-items-center mt-4 justify-content-center" >
-        <button className="btn btn-success" type="button" disabled>
-  <span className="spinner-border spinner-border-sm" aria-hidden="true"></span>
-  <span role="status">Loading...</span>
-</button>
-      </div>
-
-    )
-  }
+  useEffect(() => {
+    const storedToken = localStorage.getItem("token");
+    if (storedToken) {
+      try {
+        setUser(JSON.parse(storedToken));
+      } catch (error) {
+        // console.error("Invalid token format:", error);
+      }
+    }
+  }, [setUser]);
 
   return (
-    <>
-    
     <Router>
       <Navbar />
-      <Routes>
-        <Route path='/' element={ <CardSection/> }/>
+      <Suspense fallback={<Loading/>}>
+        <Routes>
+        <Route path="/" element={<CardSection />} /> 
         <Route path='/login' element={ <Login/> }/>
         <Route path='/user/profile' element={ <Profile/> }/>
         <Route path='/Register' element={ <Register/> }/>
-        <Route path="/:id" element={<PageDetail />} />
         <Route path="/AddToCard" element={<AddToCard />} />
         <Route path="/listproduct" element={<AddProduct />} />
-      </Routes>
+        <Route path="/product/:id" element={<PageDetail />} />
+        <Route path="/about" element={<About />} />
+        <Route path="/privacy" element={<Privacy />} />
+        <Route path="/FAQ" element={<Faq />} />
+        <Route path="*" element={<PageNotFound />} />
+          
+        </Routes>
+      </Suspense>
+      
     </Router>
+  );
+};
 
-    </>
-  )
-}
-
-export default App
+export default App;

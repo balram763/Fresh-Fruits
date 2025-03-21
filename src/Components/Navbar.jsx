@@ -147,7 +147,7 @@ const Navbar = () => {
                     {searchResults.map((item) => (
                       <li key={item._id} className="dropdown-item">
                         <Link
-                          to={`/${item._id}`}
+                          to={`/product/${item._id}`}
                           className="text-dark"
                           style={{ textDecoration: 'none' }}
                           onClick={(e) => handleSelectItem(e)}

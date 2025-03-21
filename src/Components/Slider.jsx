@@ -1,39 +1,46 @@
-import React, { useContext } from 'react'
+import React,{ useContext } from 'react'
 import SliderImage from './SliderImage'
 import ShoppingContext from '../providers/ShoppingContext'
 
 const Slider = () => {
-
-    const {product} = useContext(ShoppingContext)
+  const {product} = useContext(ShoppingContext)
 
   return (
-    <div id="carouselExampleDark" className="carousel carousel-dark slide">
-  <div className="carousel-indicators">
-    <button type="button" data-bs-target="#carouselExampleDark" data-bs-slide-to="0" className="active" aria-current="true" aria-label="Slide 1"></button>
-    <button type="button" data-bs-target="#carouselExampleDark" data-bs-slide-to="1" aria-label="Slide 2"></button>
-    <button type="button" data-bs-target="#carouselExampleDark" data-bs-slide-to="2" aria-label="Slide 3"></button>
-  </div>
-  <div className="carousel-inner">
-    
-    {
-        product.map((user,index)=> {
-           if(index<3){
+    <div
+      id="carouselExampleInterval"
+      className="carousel slide "
+      data-bs-ride="carousel"
+      data-bs-interval="4000"
+    >
+
+      <div className="carousel-inner">
+     { product.map((user,index)=> {
+           if(index<7){
             return (<SliderImage user={user} index={index} key={user._id}/>)
            }
-        })
-    }
-    
-  </div>
-  <button className="carousel-control-prev" type="button" data-bs-target="#carouselExampleDark" data-bs-slide="prev">
-    <span className="carousel-control-prev-icon" aria-hidden="true"></span>
-    <span className="visually-hidden">Previous</span>
-  </button>
-  <button className="carousel-control-next" type="button" data-bs-target="#carouselExampleDark" data-bs-slide="next">
-    <span className="carousel-control-next-icon" aria-hidden="true"></span>
-    <span className="visually-hidden">Next</span>
-  </button>
-</div>
-  )
-}
+        })}
+      </div>
 
-export default Slider
+      <button
+        className="carousel-control-prev"
+        type="button"
+        data-bs-target="#carouselExampleInterval"
+        data-bs-slide="prev"
+      >
+        <span className="carousel-control-prev-icon bg-primary" aria-hidden="true"></span>
+        <span className="visually-hidden">Previous</span>
+      </button>
+      <button
+        className="carousel-control-next"
+        type="button"
+        data-bs-target="#carouselExampleInterval"
+        data-bs-slide="next"
+      >
+        <span className="bg-primary carousel-control-next-icon" aria-hidden="true"></span>
+        <span className="visually-hidden">Next</span>
+      </button>
+    </div>
+  );
+};
+
+export default Slider;

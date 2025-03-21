@@ -1,10 +1,11 @@
 import React from 'react';
+import FooterDown from './FooterDown';
 
 const Footer = () => {
   return (
     <div className="bg-light pt-4">
 
-      <div className="d-flex card align-items-center shadow rounded-0 p-md-5 border-0">
+      {/* <div className="d-flex card align-items-center rounded-0 p-md-5 border-0">
         <div className="d-md-flex w-100 justify-content-around text-center text-md-start">
           
           <div className="fs-4 card-body">
@@ -29,11 +30,58 @@ const Footer = () => {
           </div>
 
         </div>
+      </div> */}
+
+<div className="bg-light py-5">
+      <div className="container">
+        <div className="row text-center">
+          
+          {/* Best Price */}
+          <div className="col-md-4 mb-4">
+            <div className="card border-0 shadow p-4 rounded hover-effect">
+              <div className="card-body">
+                <i className="fas fa-tags text-danger fs-1 mb-3"></i>
+                <h5 className="card-title text-danger fw-bold">Best Price</h5>
+                <p className="card-text text-muted">
+                  Get unbeatable deals and top-quality products at the most affordable prices. Save big while shopping!
+                </p>
+              </div>
+            </div>
+          </div>
+
+          {/* 100% Organic */}
+          <div className="col-md-4 mb-4">
+            <div className="card border-0 shadow p-4 rounded hover-effect">
+              <div className="card-body">
+                <i className="fas fa-seedling text-success fs-1 mb-3"></i>
+                <h5 className="card-title text-success fw-bold">100% Organic</h5>
+                <p className="card-text text-muted">
+                  Enjoy farm-fresh, chemical-free, naturally grown products for a healthier and more sustainable lifestyle.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          {/* Freshness Guaranteed */}
+          <div className="col-md-4 mb-4">
+            <div className="card border-0 shadow p-4 rounded hover-effect">
+              <div className="card-body">
+                <i className="fas fa-apple-alt text-primary fs-1 mb-3"></i>
+                <h5 className="card-title text-primary fw-bold">Freshness Guaranteed</h5>
+                <p className="card-text text-muted">
+                  Experience the freshest quality with every purchase. We ensure natural taste, best quality, and ultimate freshness!
+                </p>
+              </div>
+            </div>
+          </div>
+
+        </div>
       </div>
+    </div>
 
-      <div className="border-bottom border-primary my-3"></div>
+      {/* <div className="border-bottom border-primary"></div> */}
 
-
+      <FooterDown/>
       <div className="container d-flex flex-column flex-md-row align-items-center justify-content-between py-3">
 
         <ol className="list-group list-group-horizontal gap-3">
@@ -51,6 +99,8 @@ const Footer = () => {
           </a>
         </ol>
 
+        
+
         <div className="text-center text-md-end">
           <div className="fs-5 fw-bold text-danger">
             Developed By <i className="fa-solid fa-heart text-danger"></i>
@@ -59,6 +109,7 @@ const Footer = () => {
         </div>
 
       </div>
+      
 
 
 

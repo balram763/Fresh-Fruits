@@ -5,9 +5,10 @@ import Slider from './Slider'
 import AddedProduct from './AddedProduct'
 import Footer from './Footer'
 import toast from 'react-hot-toast'
+import Loading from './Loading'
 
 const CardSection = () => {
-    const {product,handleCategory,categoryProduct,setUser,setCardItems,bestSeller,suggestions} = useContext(ShoppingContext)
+    const {isLoading,product,handleCategory,categoryProduct,setUser,setCardItems,bestSeller,suggestions} = useContext(ShoppingContext)
 
     // console.log(product)
   
@@ -55,6 +56,16 @@ const CardSection = () => {
     }
 
     const [categories,setCategories] = useState('Fruits')
+
+    if(isLoading){
+      return(
+  
+  
+  
+        <Loading/>
+  
+      )
+    }
   return (
     <>
 
