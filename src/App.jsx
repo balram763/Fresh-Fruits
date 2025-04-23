@@ -1,5 +1,5 @@
-import React, { useContext, useEffect, lazy, Suspense } from "react";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import React, { useContext, useEffect, lazy, Suspense, useState } from "react";
+import { BrowserRouter as Router, Routes, Route, useNavigate } from "react-router-dom";
 import Navbar from "./Components/Navbar";
 import ShoppingContext from "./providers/ShoppingContext";
 import CardSection from "./Components/CardSection"; 
@@ -25,6 +25,7 @@ const Faq = lazy(()=>import("./Components/Faq"))
 
 const App = () => {
   const { setUser } = useContext(ShoppingContext);
+  const [initialLoading,setInitialLoading] = useState(true)
 
   useEffect(() => {
     const storedToken = localStorage.getItem("token");
@@ -32,10 +33,20 @@ const App = () => {
       try {
         setUser(JSON.parse(storedToken));
       } catch (error) {
-        // console.error("Invalid token format:", error);
+        toast.error("something went wrong");
       }
     }
+
+    setInitialLoading(false)
+
+
   }, [setUser]);
+
+  if(initialLoading){
+    return(<Loading/>)
+  }
+
+
 
   return (
     <Router>

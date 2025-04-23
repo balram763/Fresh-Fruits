@@ -1,37 +1,41 @@
-import React, { useEffect, useState } from "react";
-import toast from "react-hot-toast";
-import { Link } from "react-router-dom"; 
+import React, { useContext, useEffect, useState } from "react";
+import toast, { ToastBar } from "react-hot-toast";
+import { Link, useNavigate } from "react-router-dom";
 import Loading from "./Loading";
+import ShoppingContext from "../providers/ShoppingContext";
 
 const OrderPage = () => {
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
+  const { user } = useContext(ShoppingContext);
+  const navigate = useNavigate();
 
   const getOrder = async () => {
-    const storedToken = localStorage.getItem("token");
-    if (!storedToken) {
-      toast.error("Please log in to view orders.");
-      setLoading(false);
-      return;
-    }
     try {
-      const parsedToken = JSON.parse(storedToken);
-      const res = await fetch("https://fresh-fruits-backend.onrender.com/api/orders", {
-        headers: {
-          Authorization: `Bearer ${parsedToken.token}`,
-        },
-      });
+      const res = await fetch(
+        "https://fresh-fruits-backend.onrender.com/api/orders",
+        {
+          headers: {
+            Authorization: `Bearer ${user?.token}`,
+          },
+        }
+      );
       const data = await res.json();
-
       setOrders(data);
     } catch (error) {
-      toast.error(error.message || "Something went wrong");
+      toast.error("Something went wrong");
     } finally {
       setLoading(false);
     }
   };
 
   useEffect(() => {
+    if (!user) {
+      navigate("/login");
+      toast.error("Please login")
+      return;
+    }
+
     getOrder();
   }, []);
 
@@ -62,25 +66,31 @@ const OrderPage = () => {
       ) : (
         <div className="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
           {orders.map((order, index) => (
-            <div
-              key={order._id}
-              className="col mb-4"
-            >
+            <div key={order._id} className="col mb-4">
               <div className="card shadow-sm">
                 <div className="card-body">
                   <div className="d-flex justify-content-between mb-3">
                     <h5 className="card- fs-6">OrderId #{order._id}</h5>
-                    <button className={`btn ${getStatusClass(order.status)} btn-sm`}>
+                    <button
+                      className={`btn ${getStatusClass(order.status)} btn-sm`}
+                    >
                       {order.status}
                     </button>
                   </div>
 
-                  <p className="card-text"><strong>Items:</strong></p>
+                  <p className="card-text">
+                    <strong>Items:</strong>
+                  </p>
                   <ul className="list-unstyled">
                     {order.items.map((item) => (
-                      <li key={item._id} className="d-flex justify-content-between">
+                      <li
+                        key={item._id}
+                        className="d-flex justify-content-between"
+                      >
                         <span>{item.name}</span>
-                        <span>{item.quantity} x ₹{item.price}</span>
+                        <span>
+                          {item.quantity} x ₹{item.price}
+                        </span>
                         <Link
                           to={`/product/${item._id}`}
                           className="btn btn-link btn-sm"
@@ -91,16 +101,21 @@ const OrderPage = () => {
                     ))}
                   </ul>
 
-                  <p className="card-text"><strong>Address:</strong></p>
+                  <p className="card-text">
+                    <strong>Address:</strong>
+                  </p>
                   <p>{order?.address}</p>
 
                   <div className="d-flex justify-content-between">
-                    <span><strong>Total:</strong></span>
+                    <span>
+                      <strong>Total:</strong>
+                    </span>
                     <span>₹{getOrderTotal(order.items)}</span>
                   </div>
 
                   <p className="text-muted mt-2">
-                    Ordered on: {new Date(order.createdAt).toLocaleDateString()} at{" "}
+                    Ordered on: {new Date(order.createdAt).toLocaleDateString()}{" "}
+                    at{" "}
                     {new Date(order.createdAt).toLocaleTimeString([], {
                       hour: "2-digit",
                       minute: "2-digit",
