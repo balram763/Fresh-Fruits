@@ -1,20 +1,26 @@
-import React, { useContext, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import ShoppingContext from '../providers/ShoppingContext'
+import { useNavigate } from 'react-router-dom'
 
 const AddProduct = () => {
-    const {addProduct} = useContext(ShoppingContext)
+    const {addProduct,user} = useContext(ShoppingContext)
     const [name,setName] = useState('')
     const [description,setDescription] = useState('')
     const [price,setPrice] = useState('')
     const [qty,setQty] = useState('')
     const [category,setCategory] = useState('')
     const [image,setImage] = useState('')
-
     const [isBestSeller, setIsBestSeller] = useState(true);
+    const navigate = useNavigate()
 
+    useEffect(()=>{
+      if (!user || !user?.isAdmin) {
+        navigate("/login");
+      }
+  
+    },[user])
     const handleToggle = () => {
       setIsBestSeller((prev)=>!prev)
-
     };
 
     const handleSubmit = async (e) => {
@@ -28,7 +34,7 @@ const AddProduct = () => {
       formData.append("qty", qty);
       formData.append("category", category);
       formData.append('bestSeller',isBestSeller)
-  
+
       await addProduct(formData);
   };
   

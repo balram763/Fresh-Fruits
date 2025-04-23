@@ -35,6 +35,7 @@ const CardSection = () => {
 
     const fetchCart = async(storedToken) => {
       const parsedToken = JSON.parse(storedToken);
+      //https://fresh-fruits-backend.onrender.com
       const response = await fetch("https://fresh-fruits-backend.onrender.com/api/cart", {
         headers: {
             Authorization: `Bearer ${parsedToken?.token}`,

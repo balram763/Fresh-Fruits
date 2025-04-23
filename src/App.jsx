@@ -4,6 +4,12 @@ import Navbar from "./Components/Navbar";
 import ShoppingContext from "./providers/ShoppingContext";
 import CardSection from "./Components/CardSection"; 
 import Loading from "./Components/Loading";
+import OrderPage from "./Components/OrderPage";
+import AddressPage from "./Components/AddressPage";
+import AdminDashboard from "./Components/AdminDeshBoard";
+import AdminProductManage from "./Components/AdminProductManage";
+import EditProduct from "./Components/EditProduct";
+import ViewOrder from "./Components/ViewOrder";
 
 const PageDetail = lazy(() => import("./Components/PageDetail"));
 const AddToCard = lazy(() => import("./Components/AddToCard"));
@@ -41,11 +47,18 @@ const App = () => {
         <Route path='/user/profile' element={ <Profile/> }/>
         <Route path='/Register' element={ <Register/> }/>
         <Route path="/AddToCard" element={<AddToCard />} />
-        <Route path="/listproduct" element={<AddProduct />} />
+        <Route path="/admin/products/listproduct" element={<AddProduct />} />
         <Route path="/product/:id" element={<PageDetail />} />
         <Route path="/about" element={<About />} />
         <Route path="/privacy" element={<Privacy />} />
         <Route path="/FAQ" element={<Faq />} />
+        <Route path="/orders" element={<OrderPage />} />
+        <Route path="/AddressPage" element={<AddressPage />} />
+        <Route path="/admin" element={<AdminDashboard />} />
+        <Route path="/admin/products" element={<AdminProductManage />} />
+        <Route path="/admin/products/:id/edit" element={<EditProduct />} />
+        <Route path="/admin/order/:id" element={<ViewOrder />} />
+
         <Route path="*" element={<PageNotFound />} />
           
         </Routes>

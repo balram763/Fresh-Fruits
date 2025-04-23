@@ -29,7 +29,7 @@ const Card = ({ user }) => {
             Read More
           </Link>
           <Link to={'/AddToCard'}  
-                onClick={() => handleCardItem(user.name, user.price, 1)}  
+                onClick={() => handleCardItem(user._id,user.name, user.price, 1)}  
                 className="btn btn-sm btn-danger fw-bold">
             Add To Cart
           </Link>

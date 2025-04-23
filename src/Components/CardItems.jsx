@@ -1,11 +1,11 @@
-import React, { useContext, useState } from 'react';
-import ShoppingContext from '../providers/ShoppingContext';
-import toast from 'react-hot-toast';
+import React, { useContext, useState } from "react";
+import ShoppingContext from "../providers/ShoppingContext";
+import toast from "react-hot-toast";
 
 const CardItems = ({ item }) => {
-  const { cardItems, setCardItems, user, handleCartChange } = useContext(ShoppingContext);
-  const [loading,setLoading] = useState(false)
-
+  const { cardItems, setCardItems, user, handleCartChange } =
+    useContext(ShoppingContext);
+  const [loading, setLoading] = useState(false);
 
   const updateQuantity = (change) => {
     const updatedItems = cardItems.map((cartItem) =>
@@ -16,71 +16,70 @@ const CardItems = ({ item }) => {
     handleCartChange(updatedItems);
   };
 
-
-
   const handleDelete = async () => {
-    const updatedItems = cardItems.filter((cartItem) => cartItem._id !== item._id);
-  
+    const updatedItems = cardItems.filter(
+      (cartItem) => cartItem._id !== item._id
+    );
+
     setLoading(true);
-  
-    // Using toast.promise for async feedback
-    await toast.promise(
-      fetch('https://fresh-fruits-backend.onrender.com/api/cart/update', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${user?.token}`,
-        },
-        body: JSON.stringify({ cart: updatedItems }),
-      }),
-      {
-        loading: 'Deleting item...',
-        success: 'Item deleted successfully!',
-        error: 'Failed to delete item. Please try again.',
-      }
-    )
+
+    await toast
+      .promise(
+        fetch("https://fresh-fruits-backend.onrender.com/api/cart/update", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${user?.token}`,
+          },
+          body: JSON.stringify({ cart: updatedItems }),
+        }),
+        {
+          loading: "Deleting item...",
+          success: "Item deleted successfully!",
+          error: "Failed to delete item. Please try again.",
+        }
+      )
       .then(() => {
         setCardItems(updatedItems);
       })
       .catch((error) => {
-        console.error('Error deleting item:', error);
+        console.error("Error deleting item:", error);
       })
       .finally(() => {
         setLoading(false);
       });
   };
-  
 
   return (
-    <div className="col  col-lg-6 col-md-12 col-sm-12 col-xs-12">
-      <div className="card p-3 shadow  w-100">
-        <div className="d-flex align-items-center  justify-content-between w-100">
-          <h4 className="fw-bold text-dark ">{item.name}</h4>
-          <div className="d-flex align-items-center">
-            <button 
-              onClick={() => updateQuantity(-1)} 
+
+
+    <div className="col-12 col-lg-6 mb-4">
+      <div className="card p-3 shadow w-100" style={{ minWidth: "46vw" }}>
+        <div className="d-flex align-items-center justify-content-between w-100">
+          <h4 className="fw-bold text-dark w-75">{item.name}</h4>
+          <div className="d-flex align-items-end">
+            <button
+              onClick={() => updateQuantity(-1)}
               className="btn btn-primary btn-sm mx-1"
             >
               <i className="fa-solid fa-minus"></i>
             </button>
             <span className="fw-bold text-primary mx-2">{item.quantity}</span>
-            <button 
-              onClick={() => updateQuantity(1)} 
+            <button
+              onClick={() => updateQuantity(1)}
               className="btn btn-warning btn-sm mx-1"
             >
               <i className="fa-solid fa-plus"></i>
             </button>
           </div>
-          <button 
-            onClick={handleDelete} 
-            className="btn btn-danger btn-sm"
-          >
+          <button onClick={handleDelete} className="btn btn-danger btn-sm">
             <i className="fa-solid fa-trash"></i>
           </button>
         </div>
-        <div className="card p-2 mt-2 shadow text-center">
-          <h5 className="text-danger  fw-bold">
-            Total: {item.quantity} * {item.price} = ₹{item.quantity * item.price}
+        <div className="border p-1 mt-2  rounded">
+          <h5 className="text-danger text-center fw-bold">
+            Total: {item.quantity} * {item.price} = ₹
+            {item.quantity * item.price}
           </h5>
         </div>
       </div>

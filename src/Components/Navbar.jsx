@@ -1,192 +1,200 @@
-// import React, { useContext, useEffect, useState } from 'react'
-// import ShoppingContext from '../providers/ShoppingContext'
-// import { Link } from 'react-router-dom'
-// import AddtoCardBtn from './AddtoCardBtn'
-
-
-
-// const Navbar = () => {
-
-
-//   const {productName,sortProduct} = useContext(ShoppingContext)
-//   const [text, setText] = useState('')
-//   const [sort,setSort] = useState(1)
-
-//   useEffect(()=>{
-//     sortProduct(sort)
-//   },[sort])
-
-  
-
-//   const handleSubmit = (e) => {
-//     e.preventDefault();
-//     productName(text)
-//     setText('')
-//     // console.log(text)
-//   }
-
-//   return (
-//     <nav className="navbar p-3 bg-light shadow " id='navbarbg'>
-//     <div className="container-fluid">
-//       <Link to={'/'} className="navbar-brand fw-bold fs-3 text-warning"><i style={{color:'green'}} className="fa-solid fa-spray-can-sparkles"></i> <span style={{color: 'green'}}>Fresh</span> Product</Link>
-     
-//        <div className='d-flex'>
-//         <Link to={'/listproduct'} className="btn btn-sm p-2 btn-outline-warning">
-//         <i className="fa-solid fa-plus"></i> Product
-//         </Link>
-//       <form>
-
-//       <select onChange={(e)=>setSort(e.target.value)} style={{width : '80px'}} className="btn mx-3 form-select btn-light" id="inputGroupSelect01">
-//     <option >Sort</option>
-//     <option value="1">LOW to HIGH</option>
-//     <option value="2">HIGH to LOW</option>
-//   </select>
-
-//       </form>
-
-
-//       <form onSubmit={(e)=>handleSubmit(e)} className="d-flex" role="search">
-//         <input onChange={(e)=>setText(e.target.value)} value={text} className="form-control me-2" type="search" placeholder="Search" aria-label="Search"/>
-        
-//         <button className="btn btn-outline-dark" type="submit">Search</button>
-//       </form>
-//     <AddtoCardBtn/>
-//     </div>
-//     </div>
-//   </nav>
-//   )
-// }
-
-// export default Navbar
-
-import React, { useContext, useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
-import ShoppingContext from '../providers/ShoppingContext';
-import AddtoCardBtn from './AddtoCardBtn';
+import React, { useContext, useEffect, useState } from "react";
+import { Link } from "react-router-dom";
+import ShoppingContext from "../providers/ShoppingContext";
 
 const Navbar = () => {
-  const { productName, sortProduct, searchResults, setSearchResults,user } = useContext(ShoppingContext);
-  const [text, setText] = useState('');
-  const [sort, setSort] = useState(1);
+  const {
+    productName,
+    sortProduct,
+    searchResults,
+    setSearchResults,
+    user,
+    Logout,
+  } = useContext(ShoppingContext);
+  const [text, setText] = useState("");
+  const [sort, setSort] = useState(0);
 
   useEffect(() => {
     sortProduct(sort);
   }, [sort]);
 
-
   const handleSearchChange = (e) => {
-    e.preventDefault()
     const query = e.target.value;
     setText(query);
     productName(query);
   };
 
-  const handleSelectItem = (item) => {
-    e.preventDefault()
-    setText(''); 
+  const handleSelectItem = () => {
+    setText("");
     setSearchResults([]);
   };
 
-
   return (
-    <nav className="navbar navbar-expand-lg navbar-light bg-light shadow p-3">
+    <nav className="navbar navbar-expand-lg navbar-light bg-light shadow-sm sticky-top">
       <div className="container-fluid">
-        
-        <Link to="/" className="navbar-brand fw-bold fs-3 text-warning">
-          <i style={{ color: 'green' }} className="fa-solid fa-spray-can-sparkles"></i>
-          <span style={{ color: 'green' }}>Fresh</span> Product
-        </Link>
+        {user?.isAdmin ? (
+          <Link to="/admin" className="navbar-brand fw-bold fs-3 text-warning">
+            <i
+              style={{ color: "green" }}
+              className="fa-solid fa-spray-can-sparkles"
+            ></i>{" "}
+            <span style={{ color: "green" }}>Fresh</span> Product
+          </Link>
+        ) : (
+          <Link to="/" className="navbar-brand fw-bold fs-3 text-warning">
+            <i
+              style={{ color: "green" }}
+              className="fa-solid fa-spray-can-sparkles"
+            ></i>{" "}
+            <span style={{ color: "green" }}>Fresh</span> Product
+          </Link>
+        )}
 
         <button
           className="navbar-toggler"
           type="button"
           data-bs-toggle="collapse"
-          data-bs-target="#navbarContent"
-          aria-controls="navbarContent"
-          aria-expanded="false"
-          aria-label="Toggle navigation"
+          data-bs-target="#navbarNav"
         >
           <span className="navbar-toggler-icon"></span>
         </button>
 
-        <div className="collapse navbar-collapse" id="navbarContent">
-          <ul className="navbar-nav ms-auto mb-2 mb-lg-0 d-flex align-items-center">
+        <div className="collapse navbar-collapse" id="navbarNav">
+          {/* Search + Sort */}
 
-            
-
-            <li className="nav-item">
+          {user?.isAdmin ? (
+            ""
+          ) : (
+            <form
+              className="d-flex mx-auto my-2 my-lg-0 position-relative"
+              style={{ maxWidth: "500px" }}
+            >
+              <input
+                className="form-control me-2"
+                type="search"
+                placeholder="Search products"
+                value={text}
+                onChange={handleSearchChange}
+              />
               <select
+                className="form-select"
+                style={{ maxWidth: "160px" }}
+                value={sort}
                 onChange={(e) => setSort(e.target.value)}
-                className="form-select btn-light mt-2 me-2"
-                style={{ width: '130px' }}
               >
                 <option value="0">Sort</option>
-                <option value="1">LOW to HIGH</option>
-                <option value="2">HIGH to LOW</option>
+                <option value="1">Price: Low to High</option>
+                <option value="2">Price: High to Low</option>
               </select>
-            </li>
 
+              {/* search dropdown */}
+              {searchResults.length > 0 && (
+                <ul
+                  className="dropdown-menu show position-absolute w-100 mt-5"
+                  style={{ zIndex: 1000 }}
+                >
+                  {searchResults.map((item) => (
+                    <li key={item._id} className="dropdown-item">
+                      <Link
+                        to={`/product/${item._id}`}
+                        className="text-dark text-decoration-none"
+                        onClick={handleSelectItem}
+                      >
+                        {item.name}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </form>
+          )}
 
-            <li className="nav-item">
-              <div className="d-flex position-relative mt-2">
-                <input
-                  onChange={handleSearchChange} 
-                  value={text}
-                  className="form-control"
-                  type="search"
-                  placeholder="Search products"
-                  aria-label="Search"
-                />
+          {/* Right nav buttons */}
+          <ul className="navbar-nav ms-auto d-flex align-items-center gap-3 mt-2">
+            {user ? (
+              <>
+                {user?.isAdmin ? (
+                  <>
+                  <li className="nav-item">
+                    <Link to="/admin/products" className="btn btn-outline-warning">
+                       Products
+                    </Link>
+                  </li>
+                  <li className="nav-item">
+                    <Link to="admin/products/listproduct" className="btn btn-outline-warning">
+                      <i className="fa-solid fa-plus me-1"></i>Add Product
+                    </Link>
+                  </li>
+                  </>
+                ) : (
+                  <>
+                    <li className="nav-item">
+                      <Link
+                        to="/AddToCard"
+                        className="btn btn-outline-secondary"
+                      >
+                        <i className="fa-solid fa-cart-shopping me-1"></i> Cart
+                      </Link>
+                    </li>
+                    <li className="nav-item">
+                      <Link to="/orders" className="btn btn-outline-secondary">
+                        <i className="fa-solid fa-box me-1"></i> Orders
+                      </Link>
+                    </li>{" "}
+                  </>
+                )}
 
-
-                {searchResults.length > 0 && (
-                  <ul
-                    className="dropdown-menu show position-absolute w-100"
-                    style={{ top: '100%', zIndex: 10 }}
+                <li className="nav-item dropdown">
+                  <button
+                    className="btn btn-outline-primary dropdown-toggle d-flex align-items-center gap-2"
+                    data-bs-toggle="dropdown"
                   >
-                    {searchResults.map((item) => (
-                      <li key={item._id} className="dropdown-item">
+                    <i className="fa-solid fa-user-circle fs-5"></i>{" "}
+                    <span>Profile</span>
+                  </button>
+                  <ul className="dropdown-menu dropdown-menu-end shadow-sm rounded-3">
+                    {user?.isAdmin ? (
+                      <li>
                         <Link
-                          to={`/product/${item._id}`}
-                          className="text-dark"
-                          style={{ textDecoration: 'none' }}
-                          onClick={(e) => handleSelectItem(e)}
+                          to="/admin"
+                          className="dropdown-item d-flex align-items-center gap-2"
                         >
-                          {item.name}
+                          <i className="fa-regular fa-id-card"></i> Dashboard
                         </Link>
                       </li>
-                    ))}
+                    ) : (
+                      <li>
+                        <Link
+                          to="/user/profile"
+                          className="dropdown-item d-flex align-items-center gap-2"
+                        >
+                          <i className="fa-regular fa-id-card"></i> My Profile
+                        </Link>
+                      </li>
+                    )}
+
+                    <li>
+                      <hr className="dropdown-divider" />
+                    </li>
+                    <li>
+                      <button
+                        onClick={() => Logout()}
+                        className="dropdown-item d-flex align-items-center gap-2 text-danger"
+                      >
+                        <i className="fa-solid fa-right-from-bracket"></i>{" "}
+                        Logout
+                      </button>
+                    </li>
                   </ul>
-                )}
-              </div>
-            </li>
-
-
-
-            {user ? 
-            <>
-            <li className="nav-item mt-2">
-               <AddtoCardBtn />
-            </li>
-
-            <li className="nav-item mt-2">
-              <Link to="/listproduct" className="btn btn-sm p-2 btn-outline-warning me-2">
-                <i className="fa-solid fa-plus"></i> Product
-              </Link>
-            </li>
-            
-               <li className="nav-item mt-2">
-                 <Link to={'/user/profile'} className='btn btn-sm btn-success fs-5'><i className="fa-solid fa-user"></i></Link>
-               </li>
-               
-   
-               </> 
-            :  <li className="nav-item mt-2 ms-2">
-                 <Link to={'/login'} className='btn btn-sm btn-success'>LogIN</Link>
-               </li>}
-
-
-
+                </li>
+              </>
+            ) : (
+              <li className="nav-item">
+                <Link to="/login" className="btn btn-success">
+                  <i className="fa-solid fa-right-to-bracket me-1"></i> Login
+                </Link>
+              </li>
+            )}
           </ul>
         </div>
       </div>

@@ -1,15 +1,20 @@
 import React, { useContext, useEffect, useState } from 'react'
 import ShoppingContext from '../providers/ShoppingContext'
 import { Link,useNavigate } from 'react-router-dom'
+import toast from 'react-hot-toast'
 
 const Login = () => {
     const {handleLogin,user} = useContext(ShoppingContext)
-    const Navigate = useNavigate()
+    const navigate = useNavigate()
 
 
     useEffect(()=>{
-        if(user){
-        Navigate('/')      
+        if(user && user.isAdmin){
+        navigate('/admin') 
+        return
+        }
+        else if(user){
+          navigate("/")
         }
     },[user])
 

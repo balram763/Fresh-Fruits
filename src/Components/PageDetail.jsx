@@ -67,9 +67,7 @@ const PageDetail = () => {
       {/* Product Image */}
       <div className="col-lg-6 col-md-6 col-12 text-center">
         <img
-          src={singleproduct?.img?.startsWith('/uploads') ? 
-               `https://fresh-fruits-backend.onrender.com${singleproduct?.img}` 
-               : singleproduct?.img}
+          src={singleproduct?.img}
           alt=""
           className="img-fluid rounded"
           style={{ maxHeight: "350px", objectFit: "contain" }}
@@ -82,7 +80,7 @@ const PageDetail = () => {
         <p className="text-muted">{singleproduct?.description}</p>
 
         <h2 className="text-warning">
-          {count} × {singleproduct.price} = {total}
+          {count} * {singleproduct.price} = {total}
         </h2>
 
         {/* Quantity Controls */}
@@ -105,7 +103,7 @@ const PageDetail = () => {
 
         <Link
           to={'/AddtoCard'}
-          onClick={() => handleCardItem(singleproduct.name, singleproduct.price, count)}
+          onClick={() => handleCardItem(singleproduct._id,singleproduct.name, singleproduct.price, count)}
           className="btn btn-danger px-4 py-2 mt-3 fw-bold"
         >
           Add To Cart

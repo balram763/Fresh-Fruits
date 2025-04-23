@@ -9,7 +9,7 @@ const Register = () => {
 
 
     useEffect(()=>{
-        if(user !== null && localStorage.getItem("userdetail") !== null){
+        if(user){
         Navigate('/')      
         }
     },[user])
