@@ -7,46 +7,38 @@ import toast from "react-hot-toast";
 import Loading from "./Loading";
 
 const AddToCard = () => {
-  const { cardItems, setCardItems, setUser,user } = useContext(ShoppingContext);
+  const { cardItems, setCardItems, setUser, user } =
+    useContext(ShoppingContext);
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
-  const [address,setAddress] = useState(null)
-
+  const [address, setAddress] = useState(null);
 
   const fetchAddress = async () => {
-        const response = await fetch("https://fresh-fruits-backend.onrender.com/api/user/address", {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "application/json",
-          },
-        });
-  
-        const data = await response.json();
-        setAddress(data.address);
-        console.log(data.address)
-    
-  };
-
-
-  const fetchCart = async () => {
-    const storedToken = localStorage.getItem("token");
-    if (storedToken) {
-      const parsedToken = JSON.parse(storedToken);
-      token = parsedToken.token;
-      setUser(parsedToken);
-    } else {
-      toast.error("Login...");
-      navigate("/login");
-      return
-    }
-
-    try {
-      const response = await fetch("https://fresh-fruits-backend.onrender.com/api/cart", {
+    const response = await fetch(
+      "https://fresh-fruits-backend.onrender.com/api/user/address",
+      {
         headers: {
-          Authorization: `Bearer ${token}`,
+          Authorization: `Bearer ${user?.token}`,
           "Content-Type": "application/json",
         },
-      });
+      }
+    );
+
+    const data = await response.json();
+    setAddress(data.address);
+  };
+
+  const fetchCart = async () => {
+    try {
+      const response = await fetch(
+        "https://fresh-fruits-backend.onrender.com/api/cart",
+        {
+          headers: {
+            Authorization: `Bearer ${user?.token}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
       const data = await response.json();
       setCardItems(data);
     } catch (error) {
@@ -56,32 +48,37 @@ const AddToCard = () => {
     }
   };
 
-
-    const placeOrder = async () => {
-      if(!address){
-        toast.error("add address to place order")
-        navigate("/user/profile")
-        return
+  const placeOrder = async () => {
+    if (!address) {
+      toast.error("add address to place order");
+      navigate("/user/profile");
+      return;
+    }
+    const res = await fetch(
+      "https://fresh-fruits-backend.onrender.com/api/orders",
+      {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${user?.token}`,
+          "Content-Type": "application/json",
+        },
       }
-        const res = await fetch("https://fresh-fruits-backend.onrender.com/api/orders", {
-          method : "POST",
-          headers: {
-            Authorization: `Bearer ${user?.token}`,
-            "Content-Type" : "application/json"
-          },
-        });
-        const data = await res.json();
-        setCardItems([]);
-        toast.success(data?.message)
-        navigate("/orders")
-    };
-
-
+    );
+    const data = await res.json();
+    setCardItems([]);
+    toast.success(data?.message);
+    navigate("/orders");
+  };
 
   useEffect(() => {
+    if (!user) {
+      toast.error("Login...");
+      navigate("/login");
+      return;
+    }
     fetchCart();
-    fetchAddress()
-  }, []);
+    fetchAddress();
+  }, [user]);
 
   const totalCartValue =
     cardItems?.reduce((sum, item) => sum + item.price * item.quantity, 0) || 0;
@@ -107,20 +104,23 @@ const AddToCard = () => {
           {cardItems.map((item) => (
             <CardItems key={item._id} item={item} />
           ))}
-
         </div>
         <div className="fixed-bottom">
-          <div style={{width:"98vw"}} className="card   overflow-x-hidden p-2 shadow text-primary fs-6 text-center ">
-            
+          <div
+            style={{ width: "98vw" }}
+            className="card   overflow-x-hidden p-2 shadow text-primary fs-6 text-center "
+          >
             Total Card Value : {totalCartValue}
           </div>
-          <div style={{width:"98vw"}} className="card  overflow-x-hidden p-1 px-4 shadow text-primary fs-6 text-center ">
-            
+          <div
+            style={{ width: "98vw" }}
+            className="card  overflow-x-hidden p-1 px-4 shadow text-primary fs-6 text-center "
+          >
             <button onClick={placeOrder} className="btn btn-primary">
-            Confirm Order
+              Confirm Order
             </button>
           </div>
-          </div>
+        </div>
       </div>
     </>
   );
