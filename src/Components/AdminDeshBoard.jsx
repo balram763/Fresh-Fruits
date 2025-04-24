@@ -15,6 +15,14 @@ const AdminDashboard = () => {
   const navigate = useNavigate();
 
 
+  useEffect(() => {
+    if (!user || !user?.isAdmin) {
+      navigate("/login");
+      return
+    }
+    fetchOrders();
+    fetchStats();
+  }, [user]);
 
   const fetchOrders = async () => {
     try {
@@ -44,14 +52,7 @@ const AdminDashboard = () => {
     }
   };
 
-  useEffect(() => {
-    if (!user || !user?.isAdmin) {
-      navigate("/login");
-      return
-    }
-    fetchOrders();
-    fetchStats();
-  }, [user]);
+
   
   const acceptOrder = async (orderId) => {
     try {
@@ -92,10 +93,10 @@ const AdminDashboard = () => {
           value={`₹${profileProfit}`}
           bg="warning"
         />
-        <DashboardCard title="Customers" value={stats.customers} bg="info" />
+        <DashboardCard title="Customers" value={stats?.customers} bg="info" />
         <DashboardCard
           title="Inventory"
-          value={stats.inventory}
+          value={stats?.inventory}
           bg="danger"
           linkText="Manage"
           link="/admin/products"
@@ -118,25 +119,25 @@ const AdminDashboard = () => {
               </tr>
             </thead>
             <tbody>
-              {orders.length > 0 ? (
+              {orders?.length > 0 ? (
                 orders.map((order) => (
-                  <tr key={order._id}>
-                    <td>{order._id}</td>
-                    <td>{order.user.email}</td>
-                    <td>{order.items.length}</td>
+                  <tr key={order?._id}>
+                    <td>{order?._id}</td>
+                    <td>{order?.user?.email}</td>
+                    <td>{order?.items?.length}</td>
                     <td>
                       <span
                         className={`badge text-bg-${
-                          order.status === "accepted" ? "success" : "secondary"
+                          order?.status === "accepted" ? "success" : "secondary"
                         }`}
                       >
-                        {order.status}
+                        {order?.status}
                       </span>
                     </td>
                     <td>
                       <div className="d-flex gap-2">
                         <Link
-                          to={`/admin/order/${order._id}`}
+                          to={`/admin/order/${order?._id}`}
                           className="btn btn-outline-primary btn-sm"
                         >
                           View
@@ -144,7 +145,7 @@ const AdminDashboard = () => {
                         {order.status === "pending" && (
                           <button
                             className="btn btn-outline-success btn-sm"
-                            onClick={() => acceptOrder(order._id)}
+                            onClick={() => acceptOrder(order?._id)}
                           >
                             Accept
                           </button>

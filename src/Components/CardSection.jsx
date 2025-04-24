@@ -4,7 +4,6 @@ import ShoppingContext from "../providers/ShoppingContext";
 import Slider from "./Slider";
 import AddedProduct from "./AddedProduct";
 import Footer from "./Footer";
-import toast from "react-hot-toast";
 import Loading from "./Loading";
 import { useNavigate } from "react-router-dom";
 

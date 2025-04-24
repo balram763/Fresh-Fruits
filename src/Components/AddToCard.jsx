@@ -13,11 +13,6 @@ const AddToCard = () => {
   const [address,setAddress] = useState(null)
 
 
-  
-
-  let token;
-
-
   const fetchAddress = async () => {
         const response = await fetch("https://fresh-fruits-backend.onrender.com/api/user/address", {
           headers: {
@@ -42,6 +37,7 @@ const AddToCard = () => {
     } else {
       toast.error("Login...");
       navigate("/login");
+      return
     }
 
     try {
