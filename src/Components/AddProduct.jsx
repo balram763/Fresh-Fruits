@@ -58,7 +58,7 @@ const AddProduct = () => {
                 
                 <option defaultValue='0'>category</option>
                 <option value='Fruits' >fruits</option>
-                <option value='Vegatables' >vegetables</option>
+                <option value='Vegetables' >vegetables</option>
                 <option value='Cooking ingredients'>Cooking ingredients</option>
                 <option value='Dairy'>Dairy</option>
                 </select>
