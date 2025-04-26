@@ -1,10 +1,12 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import ShoppingContext from "../providers/ShoppingContext";
+import Loading from "./Loading";
 
 const AdminProductManage = () => {
   const [products, setProducts] = useState([]);
   const { user } = useContext(ShoppingContext);
+    const [loading,setLoading] = useState(true)
 
   const navigate = useNavigate();
   useEffect(() => {
@@ -24,14 +26,14 @@ const AdminProductManage = () => {
       });
       const data = await res.json();
       setProducts(data);
-      console.log(data);
+      setLoading(false)
     } catch (err) {
-      console.error("Failed to fetch products", err);
+      toast.error("something went wrong");
     }
   };
 
   const deleteProduct = async (id) => {
-    if (!window.confirm("Are you sure you want to delete this product?"))
+    if (!window.confirm("Are you sure to delete this product?"))
       return;
 
     try {
@@ -43,9 +45,13 @@ const AdminProductManage = () => {
       });
       fetchProducts();
     } catch (err) {
-      toast.error("Failed to delete product");
+      toast.error("something went wrong");
     }
   };
+
+  if(loading){
+    return(<Loading/>)
+  }
 
   return (
     <div className="container mt-4">
@@ -90,7 +96,7 @@ const AdminProductManage = () => {
                       Edit
                     </Link>
                     <button
-                      className="btn btn-sm btn-danger"
+                      className="btn mt-md-0 mt-2 btn-sm btn-danger"
                       onClick={() => deleteProduct(product._id)}
                     >
                       Delete

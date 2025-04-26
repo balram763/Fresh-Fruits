@@ -2,9 +2,12 @@ import React, { useContext, useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import ShoppingContext from "../providers/ShoppingContext";
 import toast from "react-hot-toast";
+import DashboardCard from "./DashboardCard";
+import Loading from "./Loading";
 
 const AdminDashboard = () => {
   const [orders, setOrders] = useState([]);
+  const [loading,setLoading] = useState(true)
   const { user } = useContext(ShoppingContext);
   const [stats, setStats] = useState({
     totalOrders: 0,
@@ -49,6 +52,8 @@ const AdminDashboard = () => {
       setStats(data || {});
     } catch (err) {
       toast.error("something went wrong");
+    } finally {
+      setLoading(false)
     }
   };
 
@@ -62,9 +67,10 @@ const AdminDashboard = () => {
           authorization: `Bearer ${user?.token}`,
         },
       });
+      toast.success("order accepted")
       fetchOrders();
     } catch (err) {
-      console.error("Failed to accept order", err);
+      toast.error("something went wrong");
     }
   };
 
@@ -77,6 +83,11 @@ const AdminDashboard = () => {
       );
       return total + orderTotal;
     }, 0);
+
+
+    if(loading){
+      return(<Loading/>)
+    }
 
   return (
     <div className="container-fluid p-4 bg-light min-vh-100">
@@ -169,28 +180,6 @@ const AdminDashboard = () => {
   );
 };
 
-const DashboardCard = ({ title, value, bg, linkText, link }) => {
-  return (
-    <div className="col-md-3">
-      <div
-        className={`card border-0 text-white bg-${bg} shadow-sm rounded position-relative h-100`}
-        style={{ transition: "transform 0.2s ease" }}
-      >
-        <div className="card-body">
-          <h6 className="card-title">{title}</h6>
-          <h4 className="fw-semibold">{value}</h4>
-          {link && (
-            <Link
-              to={link}
-              className="btn btn-sm btn-light mt-3 position-absolute bottom-2"
-            >
-              {linkText}
-            </Link>
-          )}
-        </div>
-      </div>
-    </div>
-  );
-};
+
 
 export default AdminDashboard;

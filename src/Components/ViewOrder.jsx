@@ -13,11 +13,14 @@ const ViewOrder = () => {
 
   const getOrder = async () => {
     try {
-      const res = await fetch(`https://fresh-fruits-backend.onrender.com/api/admin/order/${id}`, {
-        headers: {
-          authorization: `Bearer ${user?.token}`,
-        },
-      });
+      const res = await fetch(
+        `https://fresh-fruits-backend.onrender.com/api/admin/order/${id}`,
+        {
+          headers: {
+            authorization: `Bearer ${user?.token}`,
+          },
+        }
+      );
       const data = await res.json();
       setOrder(data);
       setLoading(false);
@@ -34,6 +37,24 @@ const ViewOrder = () => {
 
     getOrder();
   }, [id, user]);
+
+  const acceptOrder = async (orderId) => {
+    try {
+      await fetch(
+        `https://fresh-fruits-backend.onrender.com/api/admin/orders/accept/${orderId}`,
+        {
+          method: "POST",
+          headers: {
+            authorization: `Bearer ${user?.token}`,
+          },
+        }
+      );
+      toast.success("order accepted");
+      getOrder();
+    } catch (err) {
+      toast.error("something went wrong");
+    }
+  };
 
   const getOrderTotal = (items) =>
     items.reduce((acc, item) => acc + item.price * item.quantity, 0);
@@ -60,13 +81,13 @@ const ViewOrder = () => {
       ) : order.length === 0 ? (
         <div className="text-center text-muted">You have no orders yet.</div>
       ) : (
-        <div className="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
-          <div className="card shadow-sm">
+        <div className="d-flex justify-content-center align-items-center">
+          <div className="card  shadow-sm p-md-4 p-0">
             <div className="card-body">
-              <div className="d-flex justify-content-between mb-3">
-                <h5 className="card- fs-6">OrderId #{order._id}</h5>
+              <div className="d-md-flex  justify-content-between mb-3">
+                <h5 className="fs-6">OrderId #{order._id}</h5>
                 <button
-                  className={`btn ${getStatusClass(order.status)} btn-sm`}
+                  className={`btn ${getStatusClass(order.status)}  btn-sm`}
                 >
                   {order.status}
                 </button>
@@ -111,6 +132,16 @@ const ViewOrder = () => {
                   minute: "2-digit",
                 })}
               </p>
+
+              <button
+                onClick={() => acceptOrder(id)}
+                disabled={order.status === "accepted"}
+                className={`btn w-100 ${
+                  order.status === "accepted" ? "btn-secondary" : "btn-success"
+                }`}
+              >
+                {order.status === "accepted" ? "Accepted" : "Accept"}
+              </button>
             </div>
           </div>
         </div>

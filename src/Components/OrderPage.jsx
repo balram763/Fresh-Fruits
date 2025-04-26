@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
-import toast, { ToastBar } from "react-hot-toast";
+import toast from "react-hot-toast";
 import { Link, useNavigate } from "react-router-dom";
 import Loading from "./Loading";
 import ShoppingContext from "../providers/ShoppingContext";
